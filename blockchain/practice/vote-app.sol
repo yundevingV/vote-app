@@ -71,12 +71,10 @@ contract Vote {
         require(Voted[msg.sender] == false);
         candidateList[_index].upVote++;
 
-        Voted[msg.sender] == true;
+        Voted[msg.sender] = true;
 
         emit UpVote(candidateList[_index].name, candidateList[_index].upVote);
     }
-
-
 
     // 모든 후보자의 투표 결과를 반환하는 함수
     function getAllCandidates() public view returns (candidate[] memory) {
