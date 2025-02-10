@@ -11,7 +11,7 @@ const Vote = () => {
   const [candidates, setCandidates] = useState([]);
 
   // 스마트 콘트랙트 주소
-  const contractAddress = "0xa34E61274791CDEA9775d273d6f254a41F788070";
+  const contractAddress = "0xE957DE1a998d3430297005Bf348Fc9a13Df7ffCe";
 
   // abi 주소
   const contractABI = [
@@ -267,6 +267,14 @@ const Vote = () => {
     }
   };
 
+  const handleVote = async (index) => {
+    if (contract && index !== null) {
+      await contract.methods.upVote(index).send({ from: account });
+
+      await loadCandidates(contract);
+    }
+  };
+
   return (
     <div className="max-w-md mx-auto p-6 bg-gray-100 rounded-lg shadow-md">
       {/* <h1 className="text-xl font-bold text-center">계정: {account}</h1> */}
@@ -277,11 +285,16 @@ const Vote = () => {
       <ul className="mt-2">
         {candidates.map((candidate, index) => (
           <li key={index} className="py-2 border-b border-gray-300">
-            <p>{index} 번 후보</p>
+            <p>{index + 1} 번 후보</p>
             <p>
               {candidate.name} - {candidate.upVote}표
             </p>
+
             <p onClick={() => deleteCandidate(index)}>삭제하기</p>
+
+            <p onClick={() => handleVote(index)} className="">
+              투표 하기
+            </p>
           </li>
         ))}
       </ul>
@@ -292,12 +305,6 @@ const Vote = () => {
         placeholder="후보자 이름 입력"
         className="w-full p-2 mt-4 border border-gray-300 rounded"
       />
-      <button
-        onClick={addCandidate}
-        className="w-full py-2 mt-4 bg-green-500 text-white rounded hover:bg-green-600"
-      >
-        투표 하기
-      </button>
 
       <button
         onClick={addCandidate}
