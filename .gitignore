@@ -1,0 +1,4 @@
+.deps/
+.states/
+.DS_Store
+./blockchain/prettierrc.json
