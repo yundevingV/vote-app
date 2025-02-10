@@ -1,0 +1,102 @@
+{
+	"compiler": {
+		"version": "0.8.26+commit.8a97fa7a"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_key",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_val",
+						"type": "uint256"
+					}
+				],
+				"name": "addM",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_key",
+						"type": "address"
+					}
+				],
+				"name": "getM",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"name": "myAddr",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"practice/votechain.sol": "Ex1"
+		},
+		"evmVersion": "cancun",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"practice/votechain.sol": {
+			"keccak256": "0x7eca499bafbd35d75ad4e6de777e89edd189ace075d7adeed7efc488eaf69998",
+			"license": "GPL-3.0",
+			"urls": [
+				"bzz-raw://350afbf37ef03c9b71f3756a5e687ab78c210ec0d83f59e0f99693cdf34bd689",
+				"dweb:/ipfs/QmVFUV4ixr2RJL7vNfQvpCzQ6cKrGRh3NZGCuATuJa7Ztm"
+			]
+		}
+	},
+	"version": 1
+}

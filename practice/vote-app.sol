@@ -1,0 +1,75 @@
+// SPDX-License-Identifier: GPL-3.0
+
+pragma solidity >= 0.7.0 < 0.9.0;
+
+contract Vote {
+
+    // 후보자 구조체
+    struct candidate{
+        string name;
+        uint upVote;
+    }
+
+    // 변수
+    bool live; // 투표가 끝난지 안끝난지
+    address owner;
+    candidate[] public candidateList; // 후보 리스트
+
+    // 한 번만 투표가능하도록
+    mapping (address => bool) Voted;
+
+    // 투표 이벤트
+    event AddCandidate(string name);
+    event UpVote (string candidate, uint upVote);
+    event FinishVote(bool live);
+    event Voting(address owner);
+
+	//modifier
+    modifier onlyOwner { // 투표를 종료할 사람은 운영자만 닫을 수 있다. 
+        require(msg.sender == owner);
+        _;
+    }
+
+    // constructor
+    constructor() {
+        owner = msg.sender;
+        live = true;
+
+        emit Voting(owner);
+    }
+
+    function addCandidate(string memory _name) public onlyOwner{
+       require (live  == true ); // 투표가 진행중일때만 실행 
+        require (candidateList.length < 5); // 후보자는 다섯명까지만
+        
+        candidateList.push(candidate(_name, 0)); // 후보자 이름과, 투표수 (후보자등록할대는 0표)를 리스트에 푸쉬
+
+        // emit event 이벤트를 발생시킬땐 emit
+        emit AddCandidate(_name); // 후보가 추가됨을 이벤트에 알림
+    }
+    
+    // 투표
+    function upVote(uint _indexOfCandidate) public {
+        require(live == true);
+        require(_indexOfCandidate < candidateList.length);
+        require(Voted[msg.sender] == false);
+        candidateList[_indexOfCandidate].upVote++;
+
+        Voted[msg.sender] == true;
+
+        emit UpVote(candidateList[_indexOfCandidate].name, candidateList[_indexOfCandidate].upVote);
+    }
+
+    // 모든 후보자의 투표 결과를 반환하는 함수
+    function getAllCandidates() public view returns (candidate[] memory) {
+        return candidateList; // 후보자 리스트를 반환
+    }
+
+    function finishVote() public {
+        require (live  == true ); // 투표가 진행중이면 
+        live = false;
+
+        emit FinishVote(live);
+    }
+
+}
