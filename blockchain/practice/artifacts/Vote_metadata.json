@@ -87,6 +87,11 @@
 						"internalType": "string",
 						"name": "_name",
 						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "_imageHash",
+						"type": "string"
 					}
 				],
 				"name": "addCandidate",
@@ -107,6 +112,11 @@
 					{
 						"internalType": "string",
 						"name": "name",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "imageHash",
 						"type": "string"
 					},
 					{
@@ -150,6 +160,11 @@
 								"type": "string"
 							},
 							{
+								"internalType": "string",
+								"name": "imageHash",
+								"type": "string"
+							},
+							{
 								"internalType": "uint256",
 								"name": "upVote",
 								"type": "uint256"
@@ -158,6 +173,19 @@
 						"internalType": "struct Vote.candidate[]",
 						"name": "",
 						"type": "tuple[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getTotalVotes",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
 					}
 				],
 				"stateMutability": "view",
@@ -218,11 +246,11 @@
 	},
 	"sources": {
 		"blockchain/practice/vote-app.sol": {
-			"keccak256": "0xac74213e0b5dbf6db723634cdb68f52945fc05bd736a122763de86a0e6d049e8",
+			"keccak256": "0x637a1c21b8d84f27abd14bb81b380cd30aa33f4b7cd9582bf6df5cc2a498d26b",
 			"license": "GPL-3.0",
 			"urls": [
-				"bzz-raw://8f249e9bad39baf49a00fd3c4c2062d1ea6f39749f77b4f129bbf8b279c77047",
-				"dweb:/ipfs/QmYhXSP24Cigz7jibwwwpFufnaLyVc5JDnT7kme1uzS86W"
+				"bzz-raw://7482d5af0046f2aa905a686495422babbcef8ed4fa3be66c343cd038d2dac8c3",
+				"dweb:/ipfs/QmacYjveTf3KHfGcxwEDpj4yXdomg68RhEz2ZwJS4CmUDG"
 			]
 		}
 	},
