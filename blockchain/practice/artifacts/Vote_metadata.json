@@ -178,6 +178,19 @@
 			},
 			{
 				"inputs": [],
+				"name": "getUserVote",
+				"outputs": [
+					{
+						"internalType": "string",
+						"name": "",
+						"type": "string"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
 				"name": "isOwner",
 				"outputs": [
 					{
@@ -200,6 +213,30 @@
 				"name": "upVote",
 				"outputs": [],
 				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"name": "voters",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "isVoted",
+						"type": "bool"
+					},
+					{
+						"internalType": "uint256",
+						"name": "votedCandidateIndex",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
 				"type": "function"
 			}
 		],
@@ -231,11 +268,11 @@
 	},
 	"sources": {
 		"blockchain/practice/vote-app.sol": {
-			"keccak256": "0x05cf4c1ada81d85e15011baaee4a377a9562628a49ced8a6e3cdb7cb61db5aea",
+			"keccak256": "0x839c18613f3ace8ac1c5acd16b212ba1a7404f189d8a5fd6c24ba75499450345",
 			"license": "GPL-3.0",
 			"urls": [
-				"bzz-raw://be7fa70aff54649b0a2ad920896d1f4d02405739e5565df95fd528b224d599a9",
-				"dweb:/ipfs/QmeQ6zLQM4p4kdKTk7UtuVmiqCxJa3pqWH7RHEdGYRK6Lv"
+				"bzz-raw://e15c273b87f906b7e02a3cfb96056a14d0246a39a58d1ddc9e9e85ad16809972",
+				"dweb:/ipfs/QmSxn53T6s4fM37mSXWLoAXLQ51vseckHYHj3TsZomST1T"
 			]
 		}
 	},
