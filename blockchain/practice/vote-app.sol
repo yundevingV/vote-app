@@ -7,7 +7,6 @@ contract Vote {
     // 후보자 구조체
     struct candidate{
         string name;
-        string imageHash;
         uint upVote;
     }
 
@@ -44,11 +43,11 @@ contract Vote {
         return msg.sender == owner; 
     }
 
-    function addCandidate(string memory _name, string memory _imageHash) public onlyOwner{
+    function addCandidate(string memory _name) public onlyOwner{
         require (live  == true ); // 투표가 진행중일때만 실행 
         require (candidateList.length < 5); // 후보자는 다섯명까지만
         
-        candidateList.push(candidate(_name,_imageHash, 0)); // 후보자 이름과, 투표수 (후보자등록할대는 0표)를 리스트에 푸쉬
+        candidateList.push(candidate(_name, 0)); // 후보자 이름과, 투표수 (후보자등록할대는 0표)를 리스트에 푸쉬
 
         // emit event 이벤트를 발생시킬땐 emit
         emit AddCandidate(_name); // 후보가 추가됨을 이벤트에 알림

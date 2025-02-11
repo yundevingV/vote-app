@@ -87,11 +87,6 @@
 						"internalType": "string",
 						"name": "_name",
 						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "_imageHash",
-						"type": "string"
 					}
 				],
 				"name": "addCandidate",
@@ -112,11 +107,6 @@
 					{
 						"internalType": "string",
 						"name": "name",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "imageHash",
 						"type": "string"
 					},
 					{
@@ -157,11 +147,6 @@
 							{
 								"internalType": "string",
 								"name": "name",
-								"type": "string"
-							},
-							{
-								"internalType": "string",
-								"name": "imageHash",
 								"type": "string"
 							},
 							{
@@ -246,11 +231,11 @@
 	},
 	"sources": {
 		"blockchain/practice/vote-app.sol": {
-			"keccak256": "0x637a1c21b8d84f27abd14bb81b380cd30aa33f4b7cd9582bf6df5cc2a498d26b",
+			"keccak256": "0x05cf4c1ada81d85e15011baaee4a377a9562628a49ced8a6e3cdb7cb61db5aea",
 			"license": "GPL-3.0",
 			"urls": [
-				"bzz-raw://7482d5af0046f2aa905a686495422babbcef8ed4fa3be66c343cd038d2dac8c3",
-				"dweb:/ipfs/QmacYjveTf3KHfGcxwEDpj4yXdomg68RhEz2ZwJS4CmUDG"
+				"bzz-raw://be7fa70aff54649b0a2ad920896d1f4d02405739e5565df95fd528b224d599a9",
+				"dweb:/ipfs/QmeQ6zLQM4p4kdKTk7UtuVmiqCxJa3pqWH7RHEdGYRK6Lv"
 			]
 		}
 	},
