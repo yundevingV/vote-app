@@ -294,11 +294,11 @@
 	},
 	"sources": {
 		"blockchain/practice/vote-app.sol": {
-			"keccak256": "0x9bfcbe5e80c54c330c599fefa302f5ec1b47eff833191c13620f31d2b4b21d78",
+			"keccak256": "0x637fdc471913765b959cd77afd7410eff4295b71580c067c8008de18116e5a9b",
 			"license": "GPL-3.0",
 			"urls": [
-				"bzz-raw://8f51fdf914c3fd6457d7b3fedae80bc5df58113fb2baa1a4cbcc2028e3c4b0c7",
-				"dweb:/ipfs/QmXAkrMUagYkcYfHorXNwCTcDEzvhzLcrS4LZ952ur7UfM"
+				"bzz-raw://593880b4393b921ca16b2bb90ca665c68435d871407103abf1968a17dcdbb6e5",
+				"dweb:/ipfs/QmQ54zJnCduaFVprL8UXEaZY398LdgLWsbr8Y29dcsuER4"
 			]
 		}
 	},

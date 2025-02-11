@@ -97,7 +97,7 @@ contract Vote {
     }
      
     // 총 투표수를 반환하는 함수
-    function getTotalVotes() public view returns (uint) {
+    function getTotalVotes() public view returns (uint256) {
         uint256 totalVotes = 0;
 
         // 모든 후보의 투표 수를 합산
