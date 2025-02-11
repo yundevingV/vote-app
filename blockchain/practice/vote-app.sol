@@ -17,8 +17,8 @@ contract Vote {
     }
 
     // 변수
-    bool live; 
-    address owner;
+    bool public live; 
+    address public owner;
     candidate[] public candidateList;
 
     // 한 번만 투표가능하도록
@@ -77,7 +77,6 @@ contract Vote {
         require(_index < candidateList.length);
         require(!voters[msg.sender].isVoted);
 
-        
         voters[msg.sender].isVoted = true;
         voters[msg.sender].votedCandidateIndex = _index;
         candidateList[_index].upVote++;        
@@ -98,7 +97,7 @@ contract Vote {
     }
      
     // 총 투표수를 반환하는 함수
-    function getTotalVotes() public view returns (uint256) {
+    function getTotalVotes() public view returns (uint) {
         uint256 totalVotes = 0;
 
         // 모든 후보의 투표 수를 합산

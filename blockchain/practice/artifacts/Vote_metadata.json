@@ -203,6 +203,32 @@
 				"type": "function"
 			},
 			{
+				"inputs": [],
+				"name": "live",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "owner",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
 				"inputs": [
 					{
 						"internalType": "uint256",
@@ -268,11 +294,11 @@
 	},
 	"sources": {
 		"blockchain/practice/vote-app.sol": {
-			"keccak256": "0x839c18613f3ace8ac1c5acd16b212ba1a7404f189d8a5fd6c24ba75499450345",
+			"keccak256": "0x9bfcbe5e80c54c330c599fefa302f5ec1b47eff833191c13620f31d2b4b21d78",
 			"license": "GPL-3.0",
 			"urls": [
-				"bzz-raw://e15c273b87f906b7e02a3cfb96056a14d0246a39a58d1ddc9e9e85ad16809972",
-				"dweb:/ipfs/QmSxn53T6s4fM37mSXWLoAXLQ51vseckHYHj3TsZomST1T"
+				"bzz-raw://8f51fdf914c3fd6457d7b3fedae80bc5df58113fb2baa1a4cbcc2028e3c4b0c7",
+				"dweb:/ipfs/QmXAkrMUagYkcYfHorXNwCTcDEzvhzLcrS4LZ952ur7UfM"
 			]
 		}
 	},
