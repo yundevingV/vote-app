@@ -87,6 +87,8 @@ contract Vote {
         function getUserVote() public view returns (string memory) {
 
             uint256 candidateIndex = voters[msg.sender].votedCandidateIndex;
+            require(candidateIndex < candidateList.length);
+
             return candidateList[candidateIndex].name; // 투표한 후보의 이름 반환
         }
         
