@@ -85,7 +85,7 @@ contract Vote {
     }
 
     function getUserVote() public view returns (string memory) {
-        require(!voters[msg.sender].isVoted);
+        require(voters[msg.sender].isVoted);
         uint256 candidateIndex = voters[msg.sender].votedCandidateIndex;
         require(candidateIndex < candidateList.length);
 
