@@ -84,29 +84,28 @@ contract Vote {
         emit UpVote(candidateList[_index].name, candidateList[_index].upVote);
     }
 
-    function getUserVote() public view returns (string memory) {
-        require(voters[msg.sender].isVoted);
+        function getUserVote() public view returns (string memory) {
 
-        uint256 candidateIndex = voters[msg.sender].votedCandidateIndex;
-        return candidateList[candidateIndex].name; // 투표한 후보의 이름 반환
-    }
-    
-    // 모든 후보자의 투표 결과를 반환하는 함수
-    function getAllCandidates() public view returns (candidate[] memory) {
-        return candidateList; // 후보자 리스트를 반환
-    }
-     
-    // 총 투표수를 반환하는 함수
-    function getTotalVotes() public view returns (uint256) {
-        uint256 totalVotes = 0;
-
-        // 모든 후보의 투표 수를 합산
-        for (uint256 i = 0; i < candidateList.length; i++) {
-            totalVotes += candidateList[i].upVote;
+            uint256 candidateIndex = voters[msg.sender].votedCandidateIndex;
+            return candidateList[candidateIndex].name; // 투표한 후보의 이름 반환
         }
+        
+        // 모든 후보자의 투표 결과를 반환하는 함수
+        function getAllCandidates() public view returns (candidate[] memory) {
+            return candidateList; // 후보자 리스트를 반환
+        }
+        
+        // 총 투표수를 반환하는 함수
+        function getTotalVotes() public view returns (uint256) {
+            uint256 totalVotes = 0;
 
-        return totalVotes; // 총 투표 수 반환
-    }
+            // 모든 후보의 투표 수를 합산
+            for (uint256 i = 0; i < candidateList.length; i++) {
+                totalVotes += candidateList[i].upVote;
+            }
+
+            return totalVotes; // 총 투표 수 반환
+        }
 
     // 투표 종료하기
     function finishVote() public {
