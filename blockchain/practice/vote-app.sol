@@ -84,14 +84,7 @@ contract Vote {
         emit UpVote(candidateList[_index].name, candidateList[_index].upVote);
     }
 
-    function getUserVote() public view returns (string memory) {
-        require(voters[msg.sender].isVoted);
-        uint256 candidateIndex = voters[msg.sender].votedCandidateIndex;
-        require(candidateIndex < candidateList.length);
-
-        return candidateList[candidateIndex].name; // 투표한 후보의 이름 반환
-    }
-        
+    
         // 모든 후보자의 투표 결과를 반환하는 함수
         function getAllCandidates() public view returns (candidate[] memory) {
             return candidateList; // 후보자 리스트를 반환

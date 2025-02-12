@@ -178,19 +178,6 @@
 			},
 			{
 				"inputs": [],
-				"name": "getUserVote",
-				"outputs": [
-					{
-						"internalType": "string",
-						"name": "",
-						"type": "string"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
 				"name": "isOwner",
 				"outputs": [
 					{
@@ -294,11 +281,11 @@
 	},
 	"sources": {
 		"blockchain/practice/vote-app.sol": {
-			"keccak256": "0xacb2d989a0973196bb53af648b5b9cd3a8aa6a8b26f60f5f5d778c82740d9405",
+			"keccak256": "0x111cce2b2f7c668b0f7194fab3fd74b637347056cd563f3f8aaf938a202bc2af",
 			"license": "GPL-3.0",
 			"urls": [
-				"bzz-raw://46d32d88185b0ff76874dda74d857eeec92e836c25e780efa93c873fa05f8bcc",
-				"dweb:/ipfs/QmWbaCN2fHcYbNu5kvSEDy4axL6ucBwgJNifM7oYW94cq5"
+				"bzz-raw://31f3b117775f9175758219f3c8a850015590dfdeb03cd32d5d2badc1b2a6e846",
+				"dweb:/ipfs/QmdNwARwLC5onzysJSyjGo1dsj8oZgTpknhu3V1A1nQ5Az"
 			]
 		}
 	},
