@@ -7,13 +7,12 @@ import contractABI from "../abi/contractABI.json";
 
 const Vote = () => {
   const [account, setAccount] = useState("");
-  const [isOwner, setIsOwner] = useState(false);
   const [contract, setContract] = useState(null);
   const [candidateName, setCandidateName] = useState("");
   const [candidates, setCandidates] = useState([]);
 
   // 스마트 콘트랙트 주소
-  const contractAddress = "0xE957DE1a998d3430297005Bf348Fc9a13Df7ffCe";
+  const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS;
 
   useEffect(() => {
     const loadWeb3AndContract = async () => {
@@ -31,6 +30,7 @@ const Vote = () => {
 
         try {
           await loadGetAllPoll(contractInstance);
+          await loadGetPollCount(contractInstance);
         } catch (error) {
           alert(
             "계약 호출에 오류가 발생했습니다. ABI와 계약 주소를 확인해 주세요."
@@ -65,11 +65,14 @@ const Vote = () => {
 
     setCandidateName("");
   };
-  // vote <- vote detail
-
-  // getPollResults <- vote detail
 
   // getPollCount
+  const [pollCount, setPollCount] = useState();
+
+  const loadGetPollCount = async (contractInstance) => {
+    const newPollCount = await contractInstance.methods.getPollCount().call();
+    setPollCount(newPollCount);
+  };
 
   // getAllPoll
   const [polls, setPolls] = useState([]);
@@ -101,11 +104,6 @@ const Vote = () => {
     const result = await contract.methods.getHasVoted(index).call();
     setHasVotedIndex(result);
   };
-  const deleteCandidate = async (index) => {
-    if (contract && index != null) {
-      await contract.methods.deleteCandidate(index).send({ from: account });
-    }
-  };
 
   const handleInputChange = (event) => {
     const value = event.target.value;
@@ -114,10 +112,8 @@ const Vote = () => {
 
   return (
     <div className="max-w-md mx-auto p-6 bg-gray-100 rounded-lg shadow-md">
-      {/* <h1 className="text-xl font-bold text-center">계정: {account}</h1> */}
-      <p>{isOwner}</p>
       <h2 className="text-4xl font-bold mb-5">투표</h2>
-      {/* <p>진행중인 투표수 : {totalVotes}</p> */}
+      <p>모든 투표수 : {pollCount}</p>
       <div className="flex flex-wrap gap-5 justify-center">
         {polls.map((poll, index) => (
           <div key={index} className="p-5 bg-slate-50 rounded-lg ">
@@ -132,7 +128,7 @@ const Vote = () => {
                 </li>
               ))}
             </ul>
-            <h3>Voter Status: {hasVotedIndex}</h3>
+            {/* <h3>Voter Status: {hasVotedIndex}</h3> */}
           </div>
         ))}
       </div>
@@ -206,7 +202,7 @@ const Vote = () => {
         </button>
       </div>
 
-      {isOwner && (
+      {/* {isOwner && (
         <form
           className="mt-10"
           onSubmit={(e) => {
@@ -225,7 +221,7 @@ const Vote = () => {
 
           <button type="submit"> 등록</button>
         </form>
-      )}
+      )} */}
     </div>
   );
 };

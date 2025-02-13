@@ -1,5 +1,5 @@
 import React from "react";
-import Vote from "./Vote";
+import Vote from "../components/Vote";
 
 const App = () => {
   return (
