@@ -96,6 +96,11 @@
 						"internalType": "struct Vote.Candidate[][]",
 						"name": "candidates",
 						"type": "tuple[][]"
+					},
+					{
+						"internalType": "bool[][]",
+						"name": "voterStatus",
+						"type": "bool[][]"
 					}
 				],
 				"stateMutability": "view",
@@ -143,6 +148,21 @@
 				],
 				"name": "getPollResults",
 				"outputs": [
+					{
+						"internalType": "string",
+						"name": "question",
+						"type": "string"
+					},
+					{
+						"internalType": "address",
+						"name": "owner",
+						"type": "address"
+					},
+					{
+						"internalType": "bool",
+						"name": "isActive",
+						"type": "bool"
+					},
 					{
 						"internalType": "string[]",
 						"name": "names",
@@ -233,11 +253,11 @@
 	},
 	"sources": {
 		"blockchain/practice/vote-app.sol": {
-			"keccak256": "0x6cce1ecae0a638b1262eedf5d96456cc17567af00d8cd770ec7a126ba283a40e",
+			"keccak256": "0x8e140e26cf22064185a078f1f9fafdcf2359a5e3f652873ef504e7ad5d326603",
 			"license": "GPL-3.0",
 			"urls": [
-				"bzz-raw://5056dface78afd839df71a836a8aa1989644df330343b1eab977002d6406e3bf",
-				"dweb:/ipfs/QmeM8thFRjbqMnc67VGF8JdvUsFFX3TeDAGGD3dq3iBpxQ"
+				"bzz-raw://ea4fe9fee368c0c2852fdabdca1ae1988b18f631857f28ff544405827df7c992",
+				"dweb:/ipfs/QmY7UNRHwK5SLpiVao1iJ7WksX1mhaaeNqTpv4Z7DPa8J6"
 			]
 		}
 	},
