@@ -32,7 +32,6 @@ const VoteDetail = () => {
         setContract(contractInstance);
 
         try {
-          // await loadGetPollResult(contractInstance);
         } catch (error) {
           alert(
             "계약 호출에 오류가 발생했습니다. ABI와 계약 주소를 확인해 주세요."
@@ -60,10 +59,13 @@ const VoteDetail = () => {
     await contract.methods.vote(pollId, voteIndex).send({ from: account });
 
     setVoteIndex(-1);
+
+    loadGetPollResult(contract);
   };
 
   // getPollResults <- vote detail
   const [poll, setPoll] = useState([]);
+  const [totalVoteCount, setTotalVoteCount] = useState();
 
   const loadGetPollResult = async (contractInstance) => {
     const newPoll = await contractInstance.methods
@@ -71,6 +73,15 @@ const VoteDetail = () => {
       .call();
 
     setPoll(newPoll);
+
+    const newTotalVoteCount = newPoll.votes.reduce(
+      (accumulator, currentValue) => {
+        return accumulator + Number(currentValue);
+      },
+      0
+    );
+
+    setTotalVoteCount(newTotalVoteCount);
   };
 
   // addCandidate
@@ -105,12 +116,37 @@ const VoteDetail = () => {
             )}
             onClick={() => setVoteIndex(index)}
           >
-            {name} {poll.votes[index]}
+            <div className="flex justify-between">
+              <p className="font-bold text-2xl">{name}</p>
+              <p className="font-bold text-2xl">
+                {poll.votes[index] > 0 && totalVoteCount > 0
+                  ? `${Math.floor(
+                      (Number(poll.votes[index]) / Number(totalVoteCount)) * 100
+                    )} %`
+                  : "0%"}
+              </p>
+            </div>
+            <div className="relative w-full h-2 bg-gray-200 rounded">
+              <div
+                className="absolute h-full bg-red-400 rounded"
+                style={{
+                  width: `
+                        ${
+                          (Number(poll.votes[index]) / Number(totalVoteCount)) *
+                          100
+                        }%`,
+                }}
+              ></div>
+            </div>
+            <div className="flex justify-between">
+              <p className="text-gray-400">{poll.votes[index]} 표</p>
+            </div>
           </div>
         ))
       ) : (
         <p>Loading...</p>
       )}
+
       <div className="flex justify-center mt-5">
         <button
           onClick={() => handleVote(voteIndex)}
