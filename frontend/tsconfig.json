@@ -19,7 +19,7 @@
       }
     ],
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["./src/*"]
     }
   },
   "include": [
@@ -28,7 +28,7 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "frontend/app/Vote.jsx",
-    "src/app/pages/index.jsx"
+    "src/pages/pages/index.jsx"
   ],
   "exclude": ["node_modules"]
 }
