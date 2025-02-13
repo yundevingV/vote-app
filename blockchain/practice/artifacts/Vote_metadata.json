@@ -6,71 +6,20 @@
 	"output": {
 		"abi": [
 			{
-				"inputs": [],
-				"stateMutability": "nonpayable",
-				"type": "constructor"
-			},
-			{
-				"anonymous": false,
-				"inputs": [
-					{
-						"indexed": false,
-						"internalType": "string",
-						"name": "name",
-						"type": "string"
-					}
-				],
-				"name": "AddCandidate",
-				"type": "event"
-			},
-			{
 				"anonymous": false,
 				"inputs": [
 					{
 						"indexed": false,
 						"internalType": "uint256",
-						"name": "index",
+						"name": "pollId",
 						"type": "uint256"
-					}
-				],
-				"name": "DeleteCandidate",
-				"type": "event"
-			},
-			{
-				"anonymous": false,
-				"inputs": [
-					{
-						"indexed": false,
-						"internalType": "bool",
-						"name": "live",
-						"type": "bool"
-					}
-				],
-				"name": "FinishVote",
-				"type": "event"
-			},
-			{
-				"anonymous": false,
-				"inputs": [
-					{
-						"indexed": false,
-						"internalType": "string",
-						"name": "candidate",
-						"type": "string"
 					},
 					{
 						"indexed": false,
-						"internalType": "uint256",
-						"name": "upVote",
-						"type": "uint256"
-					}
-				],
-				"name": "UpVote",
-				"type": "event"
-			},
-			{
-				"anonymous": false,
-				"inputs": [
+						"internalType": "string",
+						"name": "question",
+						"type": "string"
+					},
 					{
 						"indexed": false,
 						"internalType": "address",
@@ -78,11 +27,16 @@
 						"type": "address"
 					}
 				],
-				"name": "Voting",
+				"name": "CreatePoll",
 				"type": "event"
 			},
 			{
 				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_pollId",
+						"type": "uint256"
+					},
 					{
 						"internalType": "string",
 						"name": "_name",
@@ -97,119 +51,96 @@
 			{
 				"inputs": [
 					{
+						"internalType": "string",
+						"name": "_question",
+						"type": "string"
+					}
+				],
+				"name": "createPoll",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_pollId",
+						"type": "uint256"
+					}
+				],
+				"name": "getHasVoted",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "getPollCount",
+				"outputs": [
+					{
 						"internalType": "uint256",
 						"name": "",
 						"type": "uint256"
 					}
 				],
-				"name": "candidateList",
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_pollId",
+						"type": "uint256"
+					}
+				],
+				"name": "getPollResults",
+				"outputs": [
+					{
+						"internalType": "string[]",
+						"name": "names",
+						"type": "string[]"
+					},
+					{
+						"internalType": "uint256[]",
+						"name": "votes",
+						"type": "uint256[]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "polls",
 				"outputs": [
 					{
 						"internalType": "string",
-						"name": "name",
+						"name": "question",
 						"type": "string"
 					},
 					{
-						"internalType": "uint256",
-						"name": "upVote",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "_index",
-						"type": "uint256"
-					}
-				],
-				"name": "deleteCandidate",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "finishVote",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "getAllCandidates",
-				"outputs": [
-					{
-						"components": [
-							{
-								"internalType": "string",
-								"name": "name",
-								"type": "string"
-							},
-							{
-								"internalType": "uint256",
-								"name": "upVote",
-								"type": "uint256"
-							}
-						],
-						"internalType": "struct Vote.candidate[]",
-						"name": "",
-						"type": "tuple[]"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "getTotalVotes",
-				"outputs": [
-					{
-						"internalType": "uint256",
-						"name": "",
-						"type": "uint256"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "isOwner",
-				"outputs": [
-					{
-						"internalType": "bool",
-						"name": "",
-						"type": "bool"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "live",
-				"outputs": [
-					{
-						"internalType": "bool",
-						"name": "",
-						"type": "bool"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "owner",
-				"outputs": [
-					{
 						"internalType": "address",
-						"name": "",
+						"name": "owner",
 						"type": "address"
+					},
+					{
+						"internalType": "bool",
+						"name": "isActive",
+						"type": "bool"
 					}
 				],
 				"stateMutability": "view",
@@ -219,37 +150,18 @@
 				"inputs": [
 					{
 						"internalType": "uint256",
-						"name": "_index",
+						"name": "_pollId",
 						"type": "uint256"
-					}
-				],
-				"name": "upVote",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "",
-						"type": "address"
-					}
-				],
-				"name": "voters",
-				"outputs": [
-					{
-						"internalType": "bool",
-						"name": "isVoted",
-						"type": "bool"
 					},
 					{
 						"internalType": "uint256",
-						"name": "votedCandidateIndex",
+						"name": "_candidateIndex",
 						"type": "uint256"
 					}
 				],
-				"stateMutability": "view",
+				"name": "vote",
+				"outputs": [],
+				"stateMutability": "nonpayable",
 				"type": "function"
 			}
 		],
@@ -281,11 +193,11 @@
 	},
 	"sources": {
 		"blockchain/practice/vote-app.sol": {
-			"keccak256": "0x111cce2b2f7c668b0f7194fab3fd74b637347056cd563f3f8aaf938a202bc2af",
+			"keccak256": "0x0ad3f0fca22b45c129620920793fda54130c887529c611b67fec17a688f20373",
 			"license": "GPL-3.0",
 			"urls": [
-				"bzz-raw://31f3b117775f9175758219f3c8a850015590dfdeb03cd32d5d2badc1b2a6e846",
-				"dweb:/ipfs/QmdNwARwLC5onzysJSyjGo1dsj8oZgTpknhu3V1A1nQ5Az"
+				"bzz-raw://140626bef05300d00851ca884a44c68bbb02cef1f324d659f01612c1057ce7bd",
+				"dweb:/ipfs/QmQuRs3bUgzaJSS2HkvotQmwtT3kaxUFqW77B3yd4xYmht"
 			]
 		}
 	},
