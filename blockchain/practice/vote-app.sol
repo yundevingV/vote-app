@@ -57,6 +57,23 @@ contract Vote {
         poll.candidates[_candidateIndex].upVote++; // 해당 후보자에게 투표 추가
 
     }
+    function getAllPoll() public view returns (string[] memory questions, address[] memory owners, bool[] memory isActive, Candidate[][] memory candidates) {
+        uint256 pollCount = polls.length;
+        questions = new string[](pollCount);
+        owners = new address[](pollCount);
+        isActive = new bool[](pollCount);
+        candidates = new Candidate[][](pollCount);
+      
+
+        for (uint256 i = 0; i < pollCount; i++) {
+            questions[i] = polls[i].question; 
+            owners[i] = polls[i].owner; 
+            isActive[i] = polls[i].isActive;
+            candidates[i] = polls[i].candidates;
+        }
+
+         return (questions, owners, isActive, candidates); 
+}
 
     // 투표 결과 조회
     function getPollResults(uint _pollId) public view returns (string[] memory names, uint[] memory votes) {

@@ -62,6 +62,46 @@
 				"type": "function"
 			},
 			{
+				"inputs": [],
+				"name": "getAllPoll",
+				"outputs": [
+					{
+						"internalType": "string[]",
+						"name": "questions",
+						"type": "string[]"
+					},
+					{
+						"internalType": "address[]",
+						"name": "owners",
+						"type": "address[]"
+					},
+					{
+						"internalType": "bool[]",
+						"name": "isActive",
+						"type": "bool[]"
+					},
+					{
+						"components": [
+							{
+								"internalType": "string",
+								"name": "name",
+								"type": "string"
+							},
+							{
+								"internalType": "uint256",
+								"name": "upVote",
+								"type": "uint256"
+							}
+						],
+						"internalType": "struct Vote.Candidate[][]",
+						"name": "candidates",
+						"type": "tuple[][]"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
 				"inputs": [
 					{
 						"internalType": "uint256",
@@ -193,11 +233,11 @@
 	},
 	"sources": {
 		"blockchain/practice/vote-app.sol": {
-			"keccak256": "0x0ad3f0fca22b45c129620920793fda54130c887529c611b67fec17a688f20373",
+			"keccak256": "0x6cce1ecae0a638b1262eedf5d96456cc17567af00d8cd770ec7a126ba283a40e",
 			"license": "GPL-3.0",
 			"urls": [
-				"bzz-raw://140626bef05300d00851ca884a44c68bbb02cef1f324d659f01612c1057ce7bd",
-				"dweb:/ipfs/QmQuRs3bUgzaJSS2HkvotQmwtT3kaxUFqW77B3yd4xYmht"
+				"bzz-raw://5056dface78afd839df71a836a8aa1989644df330343b1eab977002d6406e3bf",
+				"dweb:/ipfs/QmeM8thFRjbqMnc67VGF8JdvUsFFX3TeDAGGD3dq3iBpxQ"
 			]
 		}
 	},
