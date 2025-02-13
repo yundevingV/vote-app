@@ -1,6 +1,7 @@
 "use client";
 import Web3 from "web3";
 import contractABI from "../../abi/contractABI.json";
+import cx from "classnames";
 
 import { useSearchParams } from "next/navigation";
 import { useState, useEffect } from "react";
@@ -9,10 +10,8 @@ const VoteDetail = () => {
   const searchParams = useSearchParams();
 
   const pollId = searchParams.get("id");
-  console.log(pollId);
-  const [contract, setContract] = useState(null);
 
-  const [candidates, setCandidates] = useState([]);
+  const [contract, setContract] = useState(null);
   const [account, setAccount] = useState("");
 
   // 스마트 콘트랙트 주소
@@ -33,7 +32,7 @@ const VoteDetail = () => {
         setContract(contractInstance);
 
         try {
-          await loadGetPollResult(contractInstance);
+          // await loadGetPollResult(contractInstance);
         } catch (error) {
           alert(
             "계약 호출에 오류가 발생했습니다. ABI와 계약 주소를 확인해 주세요."
@@ -44,9 +43,14 @@ const VoteDetail = () => {
       }
     };
 
-    if (!candidates) return;
     loadWeb3AndContract();
   }, []);
+
+  useEffect(() => {
+    if (!pollId || !contract) return;
+
+    loadGetPollResult(contract);
+  }, [contract, pollId]);
 
   // vote <- vote detail
   const [voteIndex, setVoteIndex] = useState(-1);
@@ -85,64 +89,44 @@ const VoteDetail = () => {
 
   return (
     <>
-      {pollId}
-
-      {/* <div className="flex flex-col gap-10 ">
-        {candidates.map((candidate, index) => (
+      <div className="flex flex-col gap-10 ">
+        <p className="font-bold text-2xl">{poll.question}</p>
+      </div>
+      {poll && poll.names ? (
+        poll.names.map((name, index) => (
           <div
             key={index}
             className={cx(
               {
                 "border-2 border-red-500 transition-transform duration-300 translate-x-3":
-                  activeCandidate === index,
+                  voteIndex === index,
               },
               "p-6 border-gray-300 shadow-xl rounded-lg flex flex-col gap-2 hover:transition-transform hover:duration-300 hover:translate-x-3"
             )}
-            onClick={() => setActiveCandidate(index)}
+            onClick={() => setVoteIndex(index)}
           >
-            <div className="flex justify-between">
-              <p className="font-bold text-2xl">{candidate.name}</p>
-              <p className="font-bold text-2xl">
-                {candidate.upVote > 0 && totalVotes > 0
-                  ? `${Math.floor(
-                      (Number(candidate.upVote) / Number(totalVotes)) * 100
-                    )} %`
-                  : "0%"}
-              </p>
-            </div>
-            <div className="relative w-full h-2 bg-gray-200 rounded">
-              <div
-                className="absolute h-full bg-red-400 rounded"
-                style={{
-                  width: `
-                        ${
-                          (Number(candidate.upVote) / Number(totalVotes)) * 100
-                        }%`,
-                }}
-              ></div>
-            </div>
-            <div className="flex justify-between">
-              <p className="text-gray-400">{candidate.upVote} 표</p>
-            </div>
+            {name} {poll.votes[index]}
           </div>
-        ))}
-      </div> */}
-      {/* <div className="flex justify-center mt-5">
+        ))
+      ) : (
+        <p>Loading...</p>
+      )}
+      <div className="flex justify-center mt-5">
         <button
-          onClick={() => handleVote(activeCandidate)}
+          onClick={() => handleVote(voteIndex)}
           className="cursor-pointer p-3 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600"
-          disabled={!activeCandidate}
+          disabled={!voteIndex}
         >
-          투표하기
+          투표하기{voteIndex}
         </button>
-      </div> */}
+      </div>
 
-      {/* {isOwner && (
+      {account === poll.owner && (
         <form
           className="mt-10"
           onSubmit={(e) => {
             e.preventDefault();
-            addCandidate();
+            handleAddCandidate();
           }}
         >
           <input
@@ -156,7 +140,7 @@ const VoteDetail = () => {
 
           <button type="submit"> 등록</button>
         </form>
-      )} */}
+      )}
     </>
   );
 };
