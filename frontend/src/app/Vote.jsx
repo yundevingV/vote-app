@@ -2,6 +2,8 @@
 
 import Web3 from "web3";
 import React, { useEffect, useState } from "react";
+import cx from "classnames";
+import contractABI from "../abi/contractABI.json";
 
 const Vote = () => {
   const [account, setAccount] = useState("");
@@ -12,194 +14,6 @@ const Vote = () => {
 
   // 스마트 콘트랙트 주소
   const contractAddress = "0xE957DE1a998d3430297005Bf348Fc9a13Df7ffCe";
-
-  // abi 주소
-  const contractABI = [
-    {
-      inputs: [],
-      stateMutability: "nonpayable",
-      type: "constructor",
-    },
-    {
-      anonymous: false,
-      inputs: [
-        {
-          indexed: false,
-          internalType: "string",
-          name: "name",
-          type: "string",
-        },
-      ],
-      name: "AddCandidate",
-      type: "event",
-    },
-    {
-      anonymous: false,
-      inputs: [
-        {
-          indexed: false,
-          internalType: "uint256",
-          name: "index",
-          type: "uint256",
-        },
-      ],
-      name: "DeleteCandidate",
-      type: "event",
-    },
-    {
-      anonymous: false,
-      inputs: [
-        {
-          indexed: false,
-          internalType: "bool",
-          name: "live",
-          type: "bool",
-        },
-      ],
-      name: "FinishVote",
-      type: "event",
-    },
-    {
-      anonymous: false,
-      inputs: [
-        {
-          indexed: false,
-          internalType: "string",
-          name: "candidate",
-          type: "string",
-        },
-        {
-          indexed: false,
-          internalType: "uint256",
-          name: "upVote",
-          type: "uint256",
-        },
-      ],
-      name: "UpVote",
-      type: "event",
-    },
-    {
-      anonymous: false,
-      inputs: [
-        {
-          indexed: false,
-          internalType: "address",
-          name: "owner",
-          type: "address",
-        },
-      ],
-      name: "Voting",
-      type: "event",
-    },
-    {
-      inputs: [
-        {
-          internalType: "string",
-          name: "_name",
-          type: "string",
-        },
-      ],
-      name: "addCandidate",
-      outputs: [],
-      stateMutability: "nonpayable",
-      type: "function",
-    },
-    {
-      inputs: [
-        {
-          internalType: "uint256",
-          name: "",
-          type: "uint256",
-        },
-      ],
-      name: "candidateList",
-      outputs: [
-        {
-          internalType: "string",
-          name: "name",
-          type: "string",
-        },
-        {
-          internalType: "uint256",
-          name: "upVote",
-          type: "uint256",
-        },
-      ],
-      stateMutability: "view",
-      type: "function",
-    },
-    {
-      inputs: [
-        {
-          internalType: "uint256",
-          name: "_index",
-          type: "uint256",
-        },
-      ],
-      name: "deleteCandidate",
-      outputs: [],
-      stateMutability: "nonpayable",
-      type: "function",
-    },
-    {
-      inputs: [],
-      name: "finishVote",
-      outputs: [],
-      stateMutability: "nonpayable",
-      type: "function",
-    },
-    {
-      inputs: [],
-      name: "getAllCandidates",
-      outputs: [
-        {
-          components: [
-            {
-              internalType: "string",
-              name: "name",
-              type: "string",
-            },
-            {
-              internalType: "uint256",
-              name: "upVote",
-              type: "uint256",
-            },
-          ],
-          internalType: "struct Vote.candidate[]",
-          name: "",
-          type: "tuple[]",
-        },
-      ],
-      stateMutability: "view",
-      type: "function",
-    },
-    {
-      inputs: [],
-      name: "isOwner",
-      outputs: [
-        {
-          internalType: "bool",
-          name: "",
-          type: "bool",
-        },
-      ],
-      stateMutability: "view",
-      type: "function",
-    },
-    {
-      inputs: [
-        {
-          internalType: "uint256",
-          name: "_index",
-          type: "uint256",
-        },
-      ],
-      name: "upVote",
-      outputs: [],
-      stateMutability: "nonpayable",
-      type: "function",
-    },
-  ];
 
   useEffect(() => {
     const loadWeb3AndContract = async () => {
@@ -214,12 +28,9 @@ const Vote = () => {
           contractAddress
         );
         setContract(contractInstance);
-        await loadCandidates(contractInstance);
-        const isOwner = await contractInstance.methods.isOwner().call();
-        setIsOwner(isOwner);
 
         try {
-          await contractInstance.methods.getAllCandidates().call();
+          await loadGetAllPoll(contractInstance);
         } catch (error) {
           alert(
             "계약 호출에 오류가 발생했습니다. ABI와 계약 주소를 확인해 주세요."
@@ -234,84 +45,187 @@ const Vote = () => {
     loadWeb3AndContract();
   }, []);
 
-  const loadCandidates = async (contractInstance) => {
-    try {
-      const allCandidates = await contractInstance.methods
-        .getAllCandidates()
-        .call();
-      setCandidates(allCandidates);
-    } catch (error) {
-      console.error("Error loading candidates:", error);
-      alert("네트워크에 오류가 생겼습니다.");
-    }
+  // createPoll
+  const [question, setQuestion] = useState();
+
+  const handleCreatePoll = async () => {
+    if (!contract && !question) return;
+    await contract.methods.createPoll(question).send({ from: account });
+
+    setQuestion("");
+    await loadGetAllPoll(contract);
   };
 
+  // addCandidate
   const addCandidate = async () => {
-    if (contract && candidateName) {
-      await contract.methods
-        .addCandidate(candidateName)
-        .send({ from: account });
-      console.log("후보자가 추가되었습니다.");
-      setCandidateName(""); // 인풋 초기화
-      await loadCandidates(contract); // 후보자 목록 다시 불러오기
-    }
+    if (!contract && !candidateName) return;
+
+    // 후보자 등록
+    await contract.methods.addCandidate(candidateName).send({ from: account });
+
+    setCandidateName("");
+  };
+  // vote <- vote detail
+
+  // getPollResults <- vote detail
+
+  // getPollCount
+
+  // getAllPoll
+  const [polls, setPolls] = useState([]);
+
+  const loadGetAllPoll = async (contractInstance) => {
+    const result = await contractInstance.methods.getAllPoll().call();
+
+    const questions = result[0];
+    const owners = result[1];
+    const isActive = result[2];
+    const candidates = result[3];
+    const voterStatus = result[4];
+
+    const newPolls = questions.map((question, index) => ({
+      question,
+      owner: owners[index],
+      isActive: isActive[index],
+      candidates: candidates[index],
+      voterStatus: voterStatus[index],
+    }));
+
+    setPolls(newPolls);
+  };
+
+  //getHasVoted
+  const [hasVotedIndex, setHasVotedIndex] = useState(false);
+
+  const loadGetHasVoted = async (index) => {
+    const result = await contract.methods.getHasVoted(index).call();
+    setHasVotedIndex(result);
   };
   const deleteCandidate = async (index) => {
-    try {
-      if (contract && index != null) {
-        await contract.methods.deleteCandidate(index).send({ from: account });
-        await loadCandidates(contract);
-      }
-    } catch (error) {
-      console.error("Error deleting candidate:", error);
+    if (contract && index != null) {
+      await contract.methods.deleteCandidate(index).send({ from: account });
     }
   };
 
-  const handleVote = async (index) => {
-    if (contract && index !== null) {
-      await contract.methods.upVote(index).send({ from: account });
-
-      await loadCandidates(contract);
-    }
+  const handleInputChange = (event) => {
+    const value = event.target.value;
+    setQuestion(value);
   };
 
   return (
     <div className="max-w-md mx-auto p-6 bg-gray-100 rounded-lg shadow-md">
       {/* <h1 className="text-xl font-bold text-center">계정: {account}</h1> */}
       <p>{isOwner}</p>
-      <h2 className="text-lg font-semibold"> 개발팀</h2>
-      <h2 className="text-base ">🍚 점심회식 장소</h2>
-
-      <ul className="mt-2">
-        {candidates.map((candidate, index) => (
-          <li key={index} className="py-2 border-b border-gray-300">
-            <p>{index + 1} 번 후보</p>
-            <p>
-              {candidate.name} - {candidate.upVote}표
-            </p>
-
-            <p onClick={() => deleteCandidate(index)}>삭제하기</p>
-
-            <p onClick={() => handleVote(index)} className="">
-              투표 하기
-            </p>
-          </li>
+      <h2 className="text-4xl font-bold mb-5">투표</h2>
+      {/* <p>진행중인 투표수 : {totalVotes}</p> */}
+      <div className="flex flex-wrap gap-5 justify-center">
+        {polls.map((poll, index) => (
+          <div key={index} className="p-5 bg-slate-50 rounded-lg ">
+            <p className="font-bold text-2xl">{poll.question}</p>
+            <p>made by {poll.owner}</p>
+            <p>{poll.isActive ? "진행중" : "종료됨"}</p>
+            <h3>Candidates:</h3>
+            <ul>
+              {poll.candidates.map((candidate, candidateIndex) => (
+                <li key={candidateIndex}>
+                  {candidate.name} - Votes: {candidate.upVote}
+                </li>
+              ))}
+            </ul>
+            <h3>Voter Status: {hasVotedIndex}</h3>
+          </div>
         ))}
-      </ul>
-      <input
-        type="text"
-        value={candidateName}
-        onChange={(e) => setCandidateName(e.target.value)}
-        placeholder="후보자 이름 입력"
-        className="w-full p-2 mt-4 border border-gray-300 rounded"
-      />
+      </div>
+      {/* <div className="flex flex-col gap-10 ">
+        {candidates.map((candidate, index) => (
+          <div
+            key={index}
+            className={cx(
+              {
+                "border-2 border-red-500 transition-transform duration-300 translate-x-3":
+                  activeCandidate === index,
+              },
+              "p-6 border-gray-300 shadow-xl rounded-lg flex flex-col gap-2 hover:transition-transform hover:duration-300 hover:translate-x-3"
+            )}
+            onClick={() => setActiveCandidate(index)}
+          >
+            <div className="flex justify-between">
+              <p className="font-bold text-2xl">{candidate.name}</p>
+              <p className="font-bold text-2xl">
+                {candidate.upVote > 0 && totalVotes > 0
+                  ? `${Math.floor(
+                      (Number(candidate.upVote) / Number(totalVotes)) * 100
+                    )} %`
+                  : "0%"}
+              </p>
+            </div>
+            <div className="relative w-full h-2 bg-gray-200 rounded">
+              <div
+                className="absolute h-full bg-red-400 rounded"
+                style={{
+                  width: `
+                        ${
+                          (Number(candidate.upVote) / Number(totalVotes)) * 100
+                        }%`,
+                }}
+              ></div>
+            </div>
+            <div className="flex justify-between">
+              <p className="text-gray-400">{candidate.upVote} 표</p>
+            </div>
+          </div>
+        ))}
+      </div> */}
+      {/* <div className="flex justify-center mt-5">
+        <button
+          onClick={() => handleVote(activeCandidate)}
+          className="cursor-pointer p-3 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600"
+          disabled={!activeCandidate}
+        >
+          투표하기
+        </button>
+      </div> */}
 
-      <button
-        onClick={addCandidate}
-        className="w-full py-2 mt-4 bg-green-500 text-white rounded hover:bg-green-600"
-      >
-        후보 메뉴 추가
-      </button>
+      <div className="flex justify-center mt-5 gap-2">
+        <input
+          type="text"
+          value={question}
+          onChange={handleInputChange}
+          placeholder="질문을 입력하세요"
+          className="p-2 border border-gray-300 rounded"
+        />
+        <button
+          onClick={() => handleCreatePoll(question)}
+          className={cx(
+            { "bg-gray-400": !question },
+            "cursor-pointer px-3 py-1 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600"
+          )}
+          disabled={!question}
+        >
+          투표 만들기
+        </button>
+      </div>
+
+      {isOwner && (
+        <form
+          className="mt-10"
+          onSubmit={(e) => {
+            e.preventDefault();
+            addCandidate();
+          }}
+        >
+          <input
+            type="text"
+            value={candidateName}
+            onChange={(e) => setCandidateName(e.target.value)}
+            placeholder="후보자 이름"
+            required
+            className="p-4 w-96 h-12 bg-slate-50 rounded-lg"
+          />
+
+          <button type="submit"> 등록</button>
+        </form>
+      )}
     </div>
   );
 };
