@@ -60,7 +60,7 @@ const VoteDetail = () => {
 
     setVoteIndex(-1);
 
-    loadGetPollResult(contract);
+    await loadGetPollResult(contract);
   };
 
   // getPollResults <- vote detail
@@ -96,87 +96,88 @@ const VoteDetail = () => {
       .send({ from: account });
 
     setCandidateName("");
+    await loadGetPollResult(contract);
   };
-
   return (
     <>
-      <div className="flex flex-col gap-10 ">
+      <div className="flex flex-col gap-10 p-10 max-w-4xl mx-auto">
         <p className="font-bold text-2xl">{poll.question}</p>
-      </div>
-      {poll && poll.names ? (
-        poll.names.map((name, index) => (
-          <div
-            key={index}
-            className={cx(
-              {
-                "border-2 border-red-500 transition-transform duration-300 translate-x-3":
-                  voteIndex === index,
-              },
-              "p-6 border-gray-300 shadow-xl rounded-lg flex flex-col gap-2 hover:transition-transform hover:duration-300 hover:translate-x-3"
-            )}
-            onClick={() => setVoteIndex(index)}
-          >
-            <div className="flex justify-between">
-              <p className="font-bold text-2xl">{name}</p>
-              <p className="font-bold text-2xl">
-                {poll.votes[index] > 0 && totalVoteCount > 0
-                  ? `${Math.floor(
-                      (Number(poll.votes[index]) / Number(totalVoteCount)) * 100
-                    )} %`
-                  : "0%"}
-              </p>
-            </div>
-            <div className="relative w-full h-2 bg-gray-200 rounded">
-              <div
-                className="absolute h-full bg-red-400 rounded"
-                style={{
-                  width: `
+        {poll && poll.names ? (
+          poll.names.map((name, index) => (
+            <div
+              key={index}
+              className={cx(
+                {
+                  "border-2 border-red-500 transition-transform duration-300 translate-x-3 p-10":
+                    voteIndex === index,
+                },
+                "p-6 border-gray-300 shadow-xl rounded-lg flex flex-col gap-2 hover:transition-transform hover:duration-300 hover:translate-x-3"
+              )}
+              onClick={() => setVoteIndex(index)}
+            >
+              <div className="flex justify-between">
+                <p className="font-bold text-2xl">{name}</p>
+                <p className="font-bold text-2xl">
+                  {poll.votes[index] > 0 && totalVoteCount > 0
+                    ? `${Math.floor(
+                        (Number(poll.votes[index]) / Number(totalVoteCount)) *
+                          100
+                      )} %`
+                    : "0%"}
+                </p>
+              </div>
+              <div className="relative w-full h-2 bg-gray-200 rounded">
+                <div
+                  className="absolute h-full bg-red-400 rounded"
+                  style={{
+                    width: `
                         ${
                           (Number(poll.votes[index]) / Number(totalVoteCount)) *
                           100
                         }%`,
-                }}
-              ></div>
+                  }}
+                ></div>
+              </div>
+              <div className="flex justify-between">
+                <p className="text-gray-400">{poll.votes[index]} 표</p>
+              </div>
             </div>
-            <div className="flex justify-between">
-              <p className="text-gray-400">{poll.votes[index]} 표</p>
-            </div>
-          </div>
-        ))
-      ) : (
-        <p>Loading...</p>
-      )}
+          ))
+        ) : (
+          <p>Loading...</p>
+        )}
 
-      <div className="flex justify-center mt-5">
-        <button
-          onClick={() => handleVote(voteIndex)}
-          className="cursor-pointer p-3 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600"
-          disabled={!voteIndex}
-        >
-          투표하기{voteIndex}
-        </button>
+        <div className="flex justify-center mt-5">
+          <button
+            onClick={() => handleVote(voteIndex)}
+            className="cursor-pointer p-3 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600"
+            disabled={voteIndex === -1}
+          >
+            투표하기
+          </button>
+        </div>
+
+        {account === poll.owner && (
+          <form
+            className="mt-10"
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleAddCandidate();
+            }}
+          >
+            <input
+              type="text"
+              value={candidateName}
+              onChange={(e) => setCandidateName(e.target.value)}
+              placeholder="후보자 이름"
+              required
+              className="p-4 w-96 h-12 bg-slate-50 rounded-lg"
+            />
+
+            <button type="submit"> 등록</button>
+          </form>
+        )}
       </div>
-
-      {account === poll.owner && (
-        <form
-          className="mt-10"
-          onSubmit={(e) => {
-            e.preventDefault();
-            handleAddCandidate();
-          }}
-        >
-          <input
-            type="text"
-            value={candidateName}
-            onChange={(e) => setCandidateName(e.target.value)}
-            placeholder="후보자 이름"
-            required
-            className="p-4 w-96 h-12 bg-slate-50 rounded-lg"
-          />
-
-          <button type="submit"> 등록</button>
-        </form>
-      )}
     </>
   );
 };
