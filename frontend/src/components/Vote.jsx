@@ -146,11 +146,14 @@ const Vote = () => {
         />
         <button
           onClick={() => handleCreatePoll(question)}
+          disabled={!question}
           className={cx(
             { "bg-gray-400": !question },
-            "cursor-pointer px-3 py-1 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600"
+            {
+              "cursor-pointer bg-emerald-500 hover:bg-emerald-600 ": question,
+            },
+            "p-3  text-white rounded-lg "
           )}
-          disabled={!question}
         >
           투표 만들기
         </button>

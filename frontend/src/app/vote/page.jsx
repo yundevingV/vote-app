@@ -100,8 +100,6 @@ const VoteDetail = () => {
       .call({ from: account });
 
     setMyVoterInfo(newMyVoterInfo);
-
-    console.log(pollId, Number(newMyVoterInfo.votedCandidateIndex));
   };
 
   // addCandidate
@@ -188,19 +186,25 @@ const VoteDetail = () => {
             onClick={() => handleVote(voteIndex)}
             className={cx(
               { "bg-gray-400": myVoterInfo && myVoterInfo.isVoted },
-              "cursor-pointer p-3 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600"
+              {
+                "cursor-pointer  hover:bg-emerald-600 bg-gray-400":
+                  myVoterInfo && !myVoterInfo.isVoted,
+              },
+              "p-3 bg-emerald-500 text-white rounded-lg "
             )}
             disabled={voteIndex === -1}
           >
             투표하기
           </button>
-          <button
-            onClick={() => handleDeletePoll(pollId)}
-            className="cursor-pointer p-3 bg-red-500 text-white rounded-lg hover:bg-red-600"
-            disabled={!poll.isActive}
-          >
-            종료하기
-          </button>
+          {poll.owner === account && (
+            <button
+              onClick={() => handleDeletePoll(pollId)}
+              className="cursor-pointer p-3 bg-red-500 text-white rounded-lg hover:bg-red-600"
+              disabled={!poll.isActive}
+            >
+              종료하기
+            </button>
+          )}
         </div>
 
         {account === poll.owner && (
