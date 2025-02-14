@@ -61,6 +61,19 @@
         "internalType": "uint256",
         "name": "_pollId",
         "type": "uint256"
+      }
+    ],
+    "name": "deletePoll",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_pollId",
+        "type": "uint256"
       },
       {
         "internalType": "uint256",
@@ -72,31 +85,6 @@
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "voter",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "pollId",
-        "type": "uint256"
-      },
-      {
-        "indexed": true,
-        "internalType": "uint256",
-        "name": "candidateIndex",
-        "type": "uint256"
-      }
-    ],
-    "name": "VoteCast",
-    "type": "event"
   },
   {
     "inputs": [],
@@ -151,12 +139,22 @@
         "type": "uint256"
       }
     ],
-    "name": "getHasVoted",
+    "name": "getMyVoterInfo",
     "outputs": [
       {
+        "internalType": "address",
+        "name": "add",
+        "type": "address"
+      },
+      {
         "internalType": "bool",
-        "name": "",
+        "name": "isVoted",
         "type": "bool"
+      },
+      {
+        "internalType": "uint256",
+        "name": "votedCandidateIndex",
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -209,6 +207,11 @@
         "internalType": "uint256[]",
         "name": "votes",
         "type": "uint256[]"
+      },
+      {
+        "internalType": "address[]",
+        "name": "voterAddresses",
+        "type": "address[]"
       }
     ],
     "stateMutability": "view",
