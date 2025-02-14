@@ -31,6 +31,31 @@
 				"type": "event"
 			},
 			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "voter",
+						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "pollId",
+						"type": "uint256"
+					},
+					{
+						"indexed": true,
+						"internalType": "uint256",
+						"name": "candidateIndex",
+						"type": "uint256"
+					}
+				],
+				"name": "VoteCast",
+				"type": "event"
+			},
+			{
 				"inputs": [
 					{
 						"internalType": "uint256",
@@ -98,28 +123,9 @@
 						"type": "tuple[][]"
 					},
 					{
-						"internalType": "bool[][]",
-						"name": "voterStatus",
-						"type": "bool[][]"
-					}
-				],
-				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "_pollId",
-						"type": "uint256"
-					}
-				],
-				"name": "getHasVoted",
-				"outputs": [
-					{
-						"internalType": "bool",
-						"name": "",
-						"type": "bool"
+						"internalType": "address[][]",
+						"name": "voterAddresses",
+						"type": "address[][]"
 					}
 				],
 				"stateMutability": "view",
@@ -253,11 +259,11 @@
 	},
 	"sources": {
 		"blockchain/practice/vote-app.sol": {
-			"keccak256": "0x8e140e26cf22064185a078f1f9fafdcf2359a5e3f652873ef504e7ad5d326603",
+			"keccak256": "0xbc39f7f8df37c81ab7bcfa37834ec24c7691d8a796e86baaa21dc5bcb6422429",
 			"license": "GPL-3.0",
 			"urls": [
-				"bzz-raw://ea4fe9fee368c0c2852fdabdca1ae1988b18f631857f28ff544405827df7c992",
-				"dweb:/ipfs/QmY7UNRHwK5SLpiVao1iJ7WksX1mhaaeNqTpv4Z7DPa8J6"
+				"bzz-raw://67225626e6c52e653a3d3dfb6c2f0724e07715d8ee1463c79d034cd68237c522",
+				"dweb:/ipfs/QmPME4dHsKv45t4RUbmhjE5EKuG2n2SxnRyvkhdvjbauMW"
 			]
 		}
 	},

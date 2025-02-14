@@ -45,6 +45,8 @@ contract Vote {
     }
     
     // 투표하기    
+    event VoteCast(address indexed voter, uint indexed pollId, uint indexed candidateIndex); // 이벤트 정의
+
     function vote(uint _pollId, uint _candidateIndex) public {
         Poll storage poll = polls[_pollId];
         require(poll.isActive, "Poll is not active");
@@ -63,32 +65,25 @@ contract Vote {
         address[] memory owners, 
         bool[] memory isActive, 
         Candidate[][] memory candidates,
-        bool[][] memory voterStatus // 수정된 부분
+        address[][] memory voterAddresses
     ) {
         uint256 pollCount = polls.length;
         questions = new string[](pollCount);
         owners = new address[](pollCount);
         isActive = new bool[](pollCount);
         candidates = new Candidate[][](pollCount);
-        voterStatus = new bool[][](pollCount); // 각 투표자의 투표 여부 배열 초기화
+        voterAddresses = new address[][](pollCount);
 
         for (uint256 i = 0; i < pollCount; i++) {
             questions[i] = polls[i].question; 
             owners[i] = polls[i].owner; 
             isActive[i] = polls[i].isActive;
             candidates[i] = polls[i].candidates;
-
-            // 각 투표자에 대한 투표 여부를 가져오기
-            uint256 voterCount = polls[i].voterAddresses.length;
-            voterStatus[i] = new bool[](voterCount); // 각 투표의 투표자 수에 맞게 배열 초기화
-
-            for (uint256 j = 0; j < voterCount; j++) {
-                address voterAddr = polls[i].voterAddresses[j];
-                voterStatus[i][j] = polls[i].voters[voterAddr].isVoted; // 해당 주소의 투표 여부 저장
-            }
+            voterAddresses[i] = polls[i].voterAddresses;
+            
         }
 
-        return (questions, owners, isActive, candidates, voterStatus); 
+        return (questions, owners, isActive, candidates, voterAddresses ); 
     }
     
     // 투표 결과 조회
@@ -108,13 +103,6 @@ contract Vote {
 
         return (question,owner,isActive,names,votes);
     }
-
-    // 투표 참여 여부 조회
-    function getHasVoted(uint _pollId) public view returns (bool) {
-        Poll storage poll = polls[_pollId];
-        return poll.voters[msg.sender].isVoted; // 사용자의 투표 여부 반환
-    }
-
 
     // 생성된 투표 수 조회
     function getPollCount() public view returns (uint) {
