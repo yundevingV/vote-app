@@ -31,31 +31,6 @@
 				"type": "event"
 			},
 			{
-				"anonymous": false,
-				"inputs": [
-					{
-						"indexed": true,
-						"internalType": "address",
-						"name": "voter",
-						"type": "address"
-					},
-					{
-						"indexed": true,
-						"internalType": "uint256",
-						"name": "pollId",
-						"type": "uint256"
-					},
-					{
-						"indexed": true,
-						"internalType": "uint256",
-						"name": "candidateIndex",
-						"type": "uint256"
-					}
-				],
-				"name": "VoteCast",
-				"type": "event"
-			},
-			{
 				"inputs": [
 					{
 						"internalType": "uint256",
@@ -145,6 +120,30 @@
 				"type": "function"
 			},
 			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_pollId",
+						"type": "uint256"
+					}
+				],
+				"name": "getMyVoterInfo",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "isVoted",
+						"type": "bool"
+					},
+					{
+						"internalType": "uint256",
+						"name": "votedCandidateIndex",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
 				"inputs": [],
 				"name": "getPollCount",
 				"outputs": [
@@ -191,6 +190,11 @@
 						"internalType": "uint256[]",
 						"name": "votes",
 						"type": "uint256[]"
+					},
+					{
+						"internalType": "address[]",
+						"name": "voterAddresses",
+						"type": "address[]"
 					}
 				],
 				"stateMutability": "view",
@@ -272,11 +276,11 @@
 	},
 	"sources": {
 		"blockchain/practice/vote-app.sol": {
-			"keccak256": "0x1f414c670a0c47ae2f48b89a770dc9d138c1f7cdf6399e0cb62c2b46a8f159de",
+			"keccak256": "0xe1c32330ddd49493a7755aea512a9b80acb5067582102448cd1189878ccf2fb5",
 			"license": "GPL-3.0",
 			"urls": [
-				"bzz-raw://4ecfcd86dce7063fc41c81f1af3902f688f441feef8586ac8c1e682d3eb5f972",
-				"dweb:/ipfs/QmRPmX8M43rBe4HaByBsmPgcPVvvR6vhSfHS6YcfJmLgWs"
+				"bzz-raw://9df2babc700f631125ced6e055b97df6443f10a16bf26866cfc2c0e0fb6249fb",
+				"dweb:/ipfs/QmcdJJCTqyGme3eUnJx8hrnxTAZYjaYFuch5XLicBu3a6u"
 			]
 		}
 	},

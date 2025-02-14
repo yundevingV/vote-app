@@ -11,6 +11,7 @@ contract Vote {
 
     struct Voter {
         bool isVoted; // 투표 여부
+        mapping(uint => uint) votedCandidates; // 투표한 Poll ID와 후보자 인덱스 저장
     }
 
     struct Poll {
@@ -50,9 +51,6 @@ contract Vote {
         poll.candidates.push(Candidate(_name, 0));
     }
     
-    // 투표하기    
-    event VoteCast(address indexed voter, uint indexed pollId, uint indexed candidateIndex); // 이벤트 정의
-
     function vote(uint _pollId, uint _candidateIndex) public {
         Poll storage poll = polls[_pollId];
         require(poll.isActive, "Poll is not active");
@@ -60,7 +58,9 @@ contract Vote {
         require(_candidateIndex < poll.candidates.length, "Invalid candidate index");
 
         poll.voters[msg.sender].isVoted = true; // 투표 여부 설정
+        poll.voters[msg.sender].votedCandidates[_pollId] = _candidateIndex; // Poll ID와 후보자 인덱스 저장
         poll.candidates[_candidateIndex].upVote++; // 해당 후보자에게 투표 추가
+        
 
         // 투표자 주소를 배열에 추가
         poll.voterAddresses.push(msg.sender);
@@ -92,8 +92,18 @@ contract Vote {
         return (questions, owners, isActive, candidates, voterAddresses ); 
     }
     
+    function getMyVoterInfo(uint256 _pollId) public view returns (bool isVoted, uint256 votedCandidateIndex) {
+        Poll storage poll = polls[_pollId];
+        Voter storage voter = poll.voters[msg.sender]; // 호출한 사용자의 Voter 정보 가져오기
+        isVoted = voter.isVoted;
+        votedCandidateIndex = voter.votedCandidates[_pollId];
+        return (isVoted, votedCandidateIndex); // 투표 여부와 투표한 후보자 인덱스 반환
+    }
+
+
     // 투표 결과 조회
-    function getPollResults(uint _pollId) public view returns (string memory question, address owner, bool isActive, string[] memory names, uint[] memory votes) {
+    function getPollResults(uint _pollId) public view returns (string memory question, address owner, bool isActive, string[] memory names, uint[] memory votes, address[] memory voterAddresses
+) {
         Poll storage poll = polls[_pollId];
 
         question = poll.question;
@@ -101,13 +111,14 @@ contract Vote {
         isActive = poll.isActive;
         names = new string[](poll.candidates.length);
         votes = new uint[](poll.candidates.length);
+        voterAddresses = poll.voterAddresses;
 
         for (uint i = 0; i < poll.candidates.length; i++) {
             names[i] = poll.candidates[i].name;
             votes[i] = poll.candidates[i].upVote;
         }
 
-        return (question,owner,isActive,names,votes);
+        return (question,owner,isActive,names,votes,voterAddresses);
     }
 
     // 생성된 투표 수 조회
