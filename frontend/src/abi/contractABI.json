@@ -74,6 +74,31 @@
     "type": "function"
   },
   {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "voter",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "pollId",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "candidateIndex",
+        "type": "uint256"
+      }
+    ],
+    "name": "VoteCast",
+    "type": "event"
+  },
+  {
     "inputs": [],
     "name": "getAllPoll",
     "outputs": [
@@ -110,9 +135,9 @@
         "type": "tuple[][]"
       },
       {
-        "internalType": "bool[][]",
-        "name": "voterStatus",
-        "type": "bool[][]"
+        "internalType": "address[][]",
+        "name": "voterAddresses",
+        "type": "address[][]"
       }
     ],
     "stateMutability": "view",
@@ -160,6 +185,21 @@
     ],
     "name": "getPollResults",
     "outputs": [
+      {
+        "internalType": "string",
+        "name": "question",
+        "type": "string"
+      },
+      {
+        "internalType": "address",
+        "name": "owner",
+        "type": "address"
+      },
+      {
+        "internalType": "bool",
+        "name": "isActive",
+        "type": "bool"
+      },
       {
         "internalType": "string[]",
         "name": "names",
