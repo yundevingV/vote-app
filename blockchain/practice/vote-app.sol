@@ -37,6 +37,12 @@ contract Vote {
         emit CreatePoll(polls.length - 1, _question, msg.sender);
     }
 
+    // 투표 삭제하기
+    function deletePoll(uint _pollId) public {
+        Poll storage poll = polls[_pollId];
+        poll.isActive = false;
+    }
+
     // 후보자 추가
     function addCandidate(uint _pollId, string memory _name) public {
         Poll storage poll = polls[_pollId];

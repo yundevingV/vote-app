@@ -87,6 +87,19 @@
 				"type": "function"
 			},
 			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "_pollId",
+						"type": "uint256"
+					}
+				],
+				"name": "deletePoll",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
 				"inputs": [],
 				"name": "getAllPoll",
 				"outputs": [
@@ -259,11 +272,11 @@
 	},
 	"sources": {
 		"blockchain/practice/vote-app.sol": {
-			"keccak256": "0xbc39f7f8df37c81ab7bcfa37834ec24c7691d8a796e86baaa21dc5bcb6422429",
+			"keccak256": "0x1f414c670a0c47ae2f48b89a770dc9d138c1f7cdf6399e0cb62c2b46a8f159de",
 			"license": "GPL-3.0",
 			"urls": [
-				"bzz-raw://67225626e6c52e653a3d3dfb6c2f0724e07715d8ee1463c79d034cd68237c522",
-				"dweb:/ipfs/QmPME4dHsKv45t4RUbmhjE5EKuG2n2SxnRyvkhdvjbauMW"
+				"bzz-raw://4ecfcd86dce7063fc41c81f1af3902f688f441feef8586ac8c1e682d3eb5f972",
+				"dweb:/ipfs/QmRPmX8M43rBe4HaByBsmPgcPVvvR6vhSfHS6YcfJmLgWs"
 			]
 		}
 	},
