@@ -32,6 +32,7 @@ const Vote = () => {
         try {
           await loadGetAllPoll(contractInstance);
           await loadGetPollCount(contractInstance);
+          // await loadGetHasVoted(contractInstance, 1);
         } catch (error) {
           alert(
             "계약 호출에 오류가 발생했습니다. ABI와 계약 주소를 확인해 주세요."
@@ -74,25 +75,16 @@ const Vote = () => {
     const owners = result[1];
     const isActive = result[2];
     const candidates = result[3];
-    const voterStatus = result[4];
+    const voterAddresses = result[4];
 
     const newPolls = questions.map((question, index) => ({
       question,
       owner: owners[index],
       isActive: isActive[index],
       candidates: candidates[index],
-      voterStatus: voterStatus[index],
+      voterAddresses: voterAddresses[index],
     }));
-
     setPolls(newPolls);
-  };
-
-  //getHasVoted
-  const [hasVotedIndex, setHasVotedIndex] = useState(false);
-
-  const loadGetHasVoted = async (index) => {
-    const result = await contract.methods.getHasVoted(index).call();
-    setHasVotedIndex(result);
   };
 
   const handleInputChange = (event) => {
@@ -104,14 +96,14 @@ const Vote = () => {
     router.push(`/vote?id=${pollId}`);
   };
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-gray-100 rounded-lg shadow-md">
-      <h2 className="text-4xl font-bold mb-5">투표</h2>
+    <div className="max-w-7xl mx-auto p-6 bg-gray-100 rounded-lg shadow-md">
+      <h2 className="text-4xl font-bold mb-5">⛓️ 투표</h2>
       <p>모든 투표수 : {pollCount}</p>
       <div className="flex flex-wrap gap-5 justify-center">
         {polls.map((poll, index) => (
           <div
             key={index}
-            className="p-10 bg-slate-50 rounded-lg hover:scale-105 duration-500 cursor-pointer"
+            className="p-10 bg-slate-50 rounded-lg hover:scale-105 duration-500 cursor-pointer flex flex-col gap-3"
             onClick={() => handleNavigate(index)}
           >
             <div className="flex justify-between">
@@ -125,9 +117,21 @@ const Vote = () => {
                 {poll.isActive ? "진행중" : "종료됨"}
               </p>
             </div>
-            <p>made by {poll.owner}</p>
+            <p className="text-gray-400 text-sm">{poll.owner}</p>
 
-            {/* <h3>Voter Status: {hasVotedIndex}</h3> */}
+            {poll.candidates.slice(0, 3).map((candidate) => (
+              <p>{candidate.name}</p>
+            ))}
+
+            {poll.voterAddresses.includes(account) ? (
+              <p className="text-green-600 text-lg font-semibold">
+                🍀 투표 완료
+              </p>
+            ) : (
+              <p className="text-red-400 text-lg font-semibold">
+                🗳️ 소중한 한 표가 필요합니다 !
+              </p>
+            )}
           </div>
         ))}
       </div>
