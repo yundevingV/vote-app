@@ -63,6 +63,12 @@ const VoteDetail = () => {
     await loadGetPollResult(contract);
   };
 
+  const handleDeletePoll = async () => {
+    if (!contract || !pollId) return;
+    await contract.methods.deletePoll(pollId).send({ from: account });
+    await loadGetPollResult(contract);
+  };
+
   // getPollResults <- vote detail
   const [poll, setPoll] = useState([]);
   const [totalVoteCount, setTotalVoteCount] = useState();
@@ -154,6 +160,13 @@ const VoteDetail = () => {
             disabled={voteIndex === -1}
           >
             투표하기
+          </button>
+          <button
+            onClick={() => handleDeletePoll([pollId])}
+            className="cursor-pointer p-3 bg-red-500 text-white rounded-lg hover:bg-red-600"
+            disabled={!poll.isActive}
+          >
+            종료하기
           </button>
         </div>
 

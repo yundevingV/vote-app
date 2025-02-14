@@ -61,6 +61,19 @@
         "internalType": "uint256",
         "name": "_pollId",
         "type": "uint256"
+      }
+    ],
+    "name": "deletePoll",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_pollId",
+        "type": "uint256"
       },
       {
         "internalType": "uint256",
@@ -138,25 +151,6 @@
         "internalType": "address[][]",
         "name": "voterAddresses",
         "type": "address[][]"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "_pollId",
-        "type": "uint256"
-      }
-    ],
-    "name": "getHasVoted",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
       }
     ],
     "stateMutability": "view",
