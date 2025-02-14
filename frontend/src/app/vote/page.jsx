@@ -49,6 +49,7 @@ const VoteDetail = () => {
     if (!pollId || !contract) return;
 
     loadGetPollResult(contract);
+    loadGetMyVoterInfo(contract);
   }, [contract, pollId]);
 
   // vote <- vote detail
@@ -90,6 +91,19 @@ const VoteDetail = () => {
     setTotalVoteCount(newTotalVoteCount);
   };
 
+  // getMyVoterInfo
+  const [myVoterInfo, setMyVoterInfo] = useState();
+
+  const loadGetMyVoterInfo = async (contractInstance) => {
+    const newMyVoterInfo = await contractInstance.methods
+      .getMyVoterInfo(pollId)
+      .call({ from: account });
+
+    setMyVoterInfo(newMyVoterInfo);
+
+    console.log(pollId, Number(newMyVoterInfo.votedCandidateIndex));
+  };
+
   // addCandidate
   const [candidateName, setCandidateName] = useState("");
 
@@ -107,7 +121,21 @@ const VoteDetail = () => {
   return (
     <>
       <div className="flex flex-col gap-10 p-10 max-w-4xl mx-auto">
-        <p className="font-bold text-2xl">{poll.question}</p>
+        <div>
+          <p className="font-bold text-2xl">{poll.question}</p>
+          <div className="flex items-center">
+            <p
+              className={cx(
+                poll.isActive ? "text-green-600" : "text-red-400",
+                "text-lg font-semibold"
+              )}
+            >
+              {poll.isActive ? "진행중" : "종료됨"}
+            </p>
+            <p className="mx-2">&#183;</p>
+            <p className="text-gray-500">{totalVoteCount}표</p>
+          </div>
+        </div>
         {poll && poll.names ? (
           poll.names.map((name, index) => (
             <div
@@ -115,7 +143,9 @@ const VoteDetail = () => {
               className={cx(
                 {
                   "border-2 border-red-500 transition-transform duration-300 translate-x-3 p-10":
-                    voteIndex === index,
+                    voteIndex === index ||
+                    Number(myVoterInfo && myVoterInfo.votedCandidateIndex) ===
+                      index,
                 },
                 "p-6 border-gray-300 shadow-xl rounded-lg flex flex-col gap-2 hover:transition-transform hover:duration-300 hover:translate-x-3"
               )}
@@ -156,13 +186,16 @@ const VoteDetail = () => {
         <div className="flex justify-center mt-5">
           <button
             onClick={() => handleVote(voteIndex)}
-            className="cursor-pointer p-3 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600"
+            className={cx(
+              { "bg-gray-400": myVoterInfo && myVoterInfo.isVoted },
+              "cursor-pointer p-3 bg-emerald-500 text-white rounded-lg hover:bg-emerald-600"
+            )}
             disabled={voteIndex === -1}
           >
             투표하기
           </button>
           <button
-            onClick={() => handleDeletePoll([pollId])}
+            onClick={() => handleDeletePoll(pollId)}
             className="cursor-pointer p-3 bg-red-500 text-white rounded-lg hover:bg-red-600"
             disabled={!poll.isActive}
           >
