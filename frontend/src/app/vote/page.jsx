@@ -3,13 +3,14 @@ import Web3 from "web3";
 import contractABI from "../../abi/contractABI.json";
 import cx from "classnames";
 
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 
 const VoteDetail = () => {
   const searchParams = useSearchParams();
 
   const pollId = searchParams.get("id");
+  const router = useRouter();
 
   const [contract, setContract] = useState(null);
   const [account, setAccount] = useState("");
@@ -116,118 +117,156 @@ const VoteDetail = () => {
     setCandidateName("");
     await loadGetPollResult(contract);
   };
+
   return (
     <>
-      <div className="flex flex-col gap-10 p-10 max-w-4xl mx-auto">
-        <div>
-          <p className="font-bold text-2xl">{poll.question}</p>
-          <div className="flex items-center">
-            <p
-              className={cx(
-                poll.isActive ? "text-green-600" : "text-red-400",
-                "text-lg font-semibold"
+      {poll.length === 0 ? (
+        <div className="flex justify-center items-center h-screen">
+          <p>Loading...</p>
+        </div>
+      ) : (
+        <div className="flex flex-col gap-10 ">
+          <div className="flex justify-between items-center">
+            <div className="flex flex-col gap-2">
+              <button
+                onClick={() => router.push("/")}
+                className="text-blue-500 text-left"
+              >
+                목록으로 돌아가기
+              </button>
+              <p className="font-bold text-2xl">{poll.question}</p>
+              <div className="flex items-center">
+                <p
+                  className={cx(
+                    poll.isActive ? "text-green-600" : "text-red-400",
+                    "text-lg font-semibold"
+                  )}
+                >
+                  {poll.isActive ? "진행중" : "종료됨"}
+                </p>
+                <p className="mx-2">&#183;</p>
+                <p className="text-gray-500">{totalVoteCount}표</p>
+              </div>
+              {myVoterInfo && myVoterInfo.isVoted ? (
+                <p className="text-green-600 text-lg font-semibold">
+                  🍀 투표 완료
+                </p>
+              ) : (
+                <p className="text-red-400 text-lg font-semibold">
+                  🗳️ 소중한 한 표가 필요합니다 !
+                </p>
               )}
+            </div>
+            {account === poll.owner && (
+              <form
+                className="flex gap-4"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  handleAddCandidate();
+                }}
+              >
+                <input
+                  type="text"
+                  value={candidateName}
+                  onChange={(e) => setCandidateName(e.target.value)}
+                  placeholder="후보자 이름"
+                  required
+                  className="p-4 w-96 h-12 bg-slate-50 rounded-lg text-black"
+                />
+
+                <button
+                  className="p-3 bg-emerald-500 text-white rounded-lg  hover:bg-emerald-600"
+                  type="submit"
+                >
+                  등록하기
+                </button>
+              </form>
+            )}
+          </div>
+          {poll && poll.names ? (
+            poll.names.map((name, index) => (
+              <div
+                key={index}
+                className={cx(
+                  {
+                    "border-2 border-red-500 transition-transform duration-300 translate-x-3 p-10 ":
+                      voteIndex === index ||
+                      (myVoterInfo &&
+                        myVoterInfo.isVoted &&
+                        Number(myVoterInfo.votedCandidateIndex) === index),
+                  },
+                  {
+                    "hover:transition-transform hover:duration-300 hover:translate-x-3":
+                      myVoterInfo && !myVoterInfo.isVoted,
+                  },
+                  "p-6 shadow-lg rounded-lg flex flex-col gap-2 bg-zinc-700"
+                )}
+                onClick={() => {
+                  if (!(myVoterInfo && myVoterInfo.isVoted)) {
+                    setVoteIndex(index);
+                  }
+                }}
+              >
+                <div className="flex justify-between">
+                  <p className="font-bold text-2xl">{name}</p>
+                  <p className="font-bold text-2xl">
+                    {poll.votes[index] > 0 && totalVoteCount > 0
+                      ? `${Math.floor(
+                          (Number(poll.votes[index]) / Number(totalVoteCount)) *
+                            100
+                        )} %`
+                      : "0%"}
+                  </p>
+                </div>
+                <div className="relative w-full h-2 bg-gray-200 rounded">
+                  <div
+                    className="absolute h-full bg-red-500 rounded"
+                    style={{
+                      width: `
+                          ${
+                            (Number(poll.votes[index]) /
+                              Number(totalVoteCount)) *
+                            100
+                          }%`,
+                    }}
+                  ></div>
+                </div>
+                <div className="flex justify-between">
+                  <p className="text-gray-400">{poll.votes[index]} 표</p>
+                </div>
+              </div>
+            ))
+          ) : (
+            <p>Loading...</p>
+          )}
+
+          <div className="flex justify-center mt-5 gap-4">
+            <button
+              onClick={() => handleVote(voteIndex)}
+              className={cx(
+                { "bg-gray-400": myVoterInfo && myVoterInfo.isVoted },
+                {
+                  "cursor-pointer  hover:bg-emerald-600 bg-gray-400":
+                    myVoterInfo && !myVoterInfo.isVoted,
+                },
+                "p-3 bg-emerald-500 text-white rounded-lg "
+              )}
+              disabled={voteIndex === -1}
             >
-              {poll.isActive ? "진행중" : "종료됨"}
-            </p>
-            <p className="mx-2">&#183;</p>
-            <p className="text-gray-500">{totalVoteCount}표</p>
+              투표하기
+            </button>
+            {poll.owner === account && (
+              <button
+                onClick={() => handleDeletePoll(pollId)}
+                className="cursor-pointer p-3 bg-red-500 text-white rounded-lg hover:bg-red-600"
+                disabled={!poll.isActive}
+              >
+                종료하기
+              </button>
+            )}
           </div>
         </div>
-        {poll && poll.names ? (
-          poll.names.map((name, index) => (
-            <div
-              key={index}
-              className={cx(
-                {
-                  "border-2 border-red-500 transition-transform duration-300 translate-x-3 p-10":
-                    voteIndex === index ||
-                    Number(myVoterInfo && myVoterInfo.votedCandidateIndex) ===
-                      index,
-                },
-                "p-6 border-gray-300 shadow-xl rounded-lg flex flex-col gap-2 hover:transition-transform hover:duration-300 hover:translate-x-3"
-              )}
-              onClick={() => setVoteIndex(index)}
-            >
-              <div className="flex justify-between">
-                <p className="font-bold text-2xl">{name}</p>
-                <p className="font-bold text-2xl">
-                  {poll.votes[index] > 0 && totalVoteCount > 0
-                    ? `${Math.floor(
-                        (Number(poll.votes[index]) / Number(totalVoteCount)) *
-                          100
-                      )} %`
-                    : "0%"}
-                </p>
-              </div>
-              <div className="relative w-full h-2 bg-gray-200 rounded">
-                <div
-                  className="absolute h-full bg-red-400 rounded"
-                  style={{
-                    width: `
-                        ${
-                          (Number(poll.votes[index]) / Number(totalVoteCount)) *
-                          100
-                        }%`,
-                  }}
-                ></div>
-              </div>
-              <div className="flex justify-between">
-                <p className="text-gray-400">{poll.votes[index]} 표</p>
-              </div>
-            </div>
-          ))
-        ) : (
-          <p>Loading...</p>
-        )}
-
-        <div className="flex justify-center mt-5">
-          <button
-            onClick={() => handleVote(voteIndex)}
-            className={cx(
-              { "bg-gray-400": myVoterInfo && myVoterInfo.isVoted },
-              {
-                "cursor-pointer  hover:bg-emerald-600 bg-gray-400":
-                  myVoterInfo && !myVoterInfo.isVoted,
-              },
-              "p-3 bg-emerald-500 text-white rounded-lg "
-            )}
-            disabled={voteIndex === -1}
-          >
-            투표하기
-          </button>
-          {poll.owner === account && (
-            <button
-              onClick={() => handleDeletePoll(pollId)}
-              className="cursor-pointer p-3 bg-red-500 text-white rounded-lg hover:bg-red-600"
-              disabled={!poll.isActive}
-            >
-              종료하기
-            </button>
-          )}
-        </div>
-
-        {account === poll.owner && (
-          <form
-            className="mt-10"
-            onSubmit={(e) => {
-              e.preventDefault();
-              handleAddCandidate();
-            }}
-          >
-            <input
-              type="text"
-              value={candidateName}
-              onChange={(e) => setCandidateName(e.target.value)}
-              placeholder="후보자 이름"
-              required
-              className="p-4 w-96 h-12 bg-slate-50 rounded-lg"
-            />
-
-            <button type="submit"> 등록</button>
-          </form>
-        )}
-      </div>
+      )}
     </>
   );
 };

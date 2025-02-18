@@ -47,7 +47,7 @@ const Vote = () => {
   }, []);
 
   // createPoll
-  const [question, setQuestion] = useState();
+  const [question, setQuestion] = useState("");
 
   const handleCreatePoll = async () => {
     if (!contract && !question) return;
@@ -95,15 +95,42 @@ const Vote = () => {
   const handleNavigate = (pollId) => {
     router.push(`/vote?id=${pollId}`);
   };
+
   return (
-    <div className="max-w-7xl mx-auto p-6 bg-gray-100 rounded-lg shadow-md">
-      <h2 className="text-4xl font-bold mb-5">⛓️ 투표</h2>
-      <p>모든 투표수 : {pollCount}</p>
+    <div className="flex flex-col gap-10 ">
+      <div className="flex justify-between items-center">
+        <div>
+          <h2 className="text-4xl font-bold mb-5">⛓️ 투표</h2>
+          <p>모든 투표수 : {pollCount}</p>
+        </div>
+        <div className="flex justify-center mt-5 gap-2">
+          <input
+            type="text"
+            value={question}
+            onChange={handleInputChange}
+            placeholder="질문을 입력하세요"
+            className="p-4 w-80 h-12 bg-slate-50 rounded-lg"
+          />
+          <button
+            onClick={() => handleCreatePoll(question)}
+            disabled={!question}
+            className={cx(
+              { "bg-gray-400": !question },
+              {
+                "cursor-pointer bg-emerald-500 hover:bg-emerald-600 ": question,
+              },
+              "p-3  text-white rounded-lg "
+            )}
+          >
+            투표 만들기
+          </button>
+        </div>
+      </div>
       <div className="flex flex-wrap gap-5 justify-center">
         {polls.map((poll, index) => (
           <div
-            key={index}
-            className="p-10 bg-slate-50 rounded-lg hover:scale-105 duration-500 cursor-pointer flex flex-col gap-3"
+            key={`${poll.question}_${index}`}
+            className="p-10 w-96 bg-zinc-600 rounded-lg hover:scale-105 duration-500 cursor-pointer flex flex-col gap-3 shadow-md"
             onClick={() => handleNavigate(index)}
           >
             <div className="flex justify-between">
@@ -117,12 +144,6 @@ const Vote = () => {
                 {poll.isActive ? "진행중" : "종료됨"}
               </p>
             </div>
-            <p className="text-gray-400 text-sm">{poll.owner}</p>
-
-            {poll.candidates.slice(0, 3).map((candidate) => (
-              <p>{candidate.name}</p>
-            ))}
-
             {poll.voterAddresses.includes(account) ? (
               <p className="text-green-600 text-lg font-semibold">
                 🍀 투표 완료
@@ -132,31 +153,14 @@ const Vote = () => {
                 🗳️ 소중한 한 표가 필요합니다 !
               </p>
             )}
+            {/* <p className="text-gray-400 text-sm">{poll.owner}</p> */}
+
+            {poll.candidates.slice(0, 3).map((candidate) => (
+              <p>{candidate.name}</p>
+            ))}
+            {!poll.candidates.length && <p>아직 후보가 없습니다 !</p>}
           </div>
         ))}
-      </div>
-
-      <div className="flex justify-center mt-5 gap-2">
-        <input
-          type="text"
-          value={question}
-          onChange={handleInputChange}
-          placeholder="질문을 입력하세요"
-          className="p-2 border border-gray-300 rounded"
-        />
-        <button
-          onClick={() => handleCreatePoll(question)}
-          disabled={!question}
-          className={cx(
-            { "bg-gray-400": !question },
-            {
-              "cursor-pointer bg-emerald-500 hover:bg-emerald-600 ": question,
-            },
-            "p-3  text-white rounded-lg "
-          )}
-        >
-          투표 만들기
-        </button>
       </div>
     </div>
   );
