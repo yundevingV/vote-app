@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import cx from "classnames";
 import contractABI from "../abi/contractABI.json";
 import { useRouter } from "next/navigation";
+import VoteButton from "./Button/VoteButton";
 
 const Vote = () => {
   const [account, setAccount] = useState("");
@@ -109,21 +110,17 @@ const Vote = () => {
             value={question}
             onChange={handleInputChange}
             placeholder="질문을 입력하세요"
-            className="p-4 w-80 h-12 bg-slate-50 rounded-lg"
+            className="p-4 w-80 h-10 bg-slate-50 rounded-lg text-black"
           />
-          <button
-            onClick={() => handleCreatePoll(question)}
-            disabled={!question}
-            className={cx(
-              { "bg-gray-400": !question },
-              {
-                "cursor-pointer bg-emerald-500 hover:bg-emerald-600 ": question,
-              },
-              "p-3  text-white rounded-lg "
-            )}
-          >
-            투표 만들기
-          </button>
+          <VoteButton
+            text={"투표 만들기"}
+            itemId={question}
+            bGColor={"bg-emerald-500"}
+            hoverBgColor={"hover:bg-emerald-600"}
+            isActive={question.length > 0}
+            isDisabled={!question.length}
+            onClick={handleCreatePoll}
+          />
         </div>
       </div>
       <div className="flex flex-wrap gap-5 justify-center">

@@ -2,9 +2,10 @@
 import Web3 from "web3";
 import contractABI from "../../abi/contractABI.json";
 import cx from "classnames";
-
+import CreateButton from "../../components/Button/CreateButton";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
+import VoteButton from "../../components/Button/VoteButton";
 
 const VoteDetail = () => {
   const searchParams = useSearchParams();
@@ -158,29 +159,25 @@ const VoteDetail = () => {
               )}
             </div>
             {account === poll.owner && (
-              <form
-                className="flex gap-4"
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  handleAddCandidate();
-                }}
-              >
+              <div className="flex justify-center  gap-2">
                 <input
                   type="text"
                   value={candidateName}
                   onChange={(e) => setCandidateName(e.target.value)}
-                  placeholder="후보자 이름"
+                  placeholder="후보 등록"
                   required
-                  className="p-4 w-96 h-12 bg-slate-50 rounded-lg text-black"
+                  className="p-4 w-80 h-10 bg-slate-50 rounded-lg text-black"
                 />
-
-                <button
-                  className="p-3 bg-emerald-500 text-white rounded-lg  hover:bg-emerald-600"
-                  type="submit"
-                >
-                  등록하기
-                </button>
-              </form>
+                <VoteButton
+                  text={"등록 하기"}
+                  itemId={candidateName}
+                  bGColor={"bg-emerald-500"}
+                  hoverBgColor={"hover:bg-emerald-600"}
+                  isActive={candidateName.length > 0}
+                  isDisabled={!candidateName.length}
+                  onClick={handleAddCandidate}
+                />
+              </div>
             )}
           </div>
           {poll && poll.names ? (
@@ -241,28 +238,25 @@ const VoteDetail = () => {
           )}
 
           <div className="flex justify-center mt-5 gap-4">
-            <button
-              onClick={() => handleVote(voteIndex)}
-              className={cx(
-                { "bg-gray-400": myVoterInfo && myVoterInfo.isVoted },
-                {
-                  "cursor-pointer  hover:bg-emerald-600 bg-gray-400":
-                    myVoterInfo && !myVoterInfo.isVoted,
-                },
-                "p-3 bg-emerald-500 text-white rounded-lg "
-              )}
-              disabled={voteIndex === -1}
-            >
-              투표하기
-            </button>
+            <VoteButton
+              text={"투표 하기"}
+              itemId={voteIndex}
+              bGColor={"bg-emerald-500"}
+              hoverBgColor={"hover:bg-emerald-600"}
+              isActive={myVoterInfo && !myVoterInfo.isVoted}
+              isDisabled={voteIndex === -1}
+              onClick={handleVote}
+            />
             {poll.owner === account && (
-              <button
-                onClick={() => handleDeletePoll(pollId)}
-                className="cursor-pointer p-3 bg-red-500 text-white rounded-lg hover:bg-red-600"
-                disabled={!poll.isActive}
-              >
-                종료하기
-              </button>
+              <VoteButton
+                text={"종료 하기"}
+                itemId={pollId}
+                bGColor={"bg-red-500"}
+                hoverBgColor={"hover:bg-red-600"}
+                isActive={poll.isActive}
+                isDisabled={!poll.isActive}
+                onClick={handleDeletePoll}
+              />
             )}
           </div>
         </div>
