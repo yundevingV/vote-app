@@ -2,7 +2,6 @@
 import Web3 from "web3";
 import contractABI from "../../abi/contractABI.json";
 import cx from "classnames";
-import CreateButton from "../../components/Button/CreateButton";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import VoteButton from "../../components/Button/VoteButton";
