@@ -3,11 +3,11 @@
 import Web3 from "web3";
 import React, { useEffect, useState } from "react";
 import cx from "classnames";
-import contractABI from "../abi/contractABI.json";
+import contractABI from "../../abi/contractABI.json";
 import { useRouter } from "next/navigation";
-import VoteButton from "./Button/VoteButton";
+import VoteButton from "../Button/VoteButton";
 
-const Vote = () => {
+const MainContent = () => {
   const [account, setAccount] = useState("");
   const [contract, setContract] = useState(null);
 
@@ -163,4 +163,4 @@ const Vote = () => {
   );
 };
 
-export default Vote;
+export default MainContent;

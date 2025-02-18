@@ -35,7 +35,7 @@ COPY . .
 RUN ls -al
 
 # ls 명령어로 .env 파일이 잘 복사되었는지 확인
-RUN ls -al ./.env
+RUN ls -al ./.env.local
 
 RUN npm run build
 

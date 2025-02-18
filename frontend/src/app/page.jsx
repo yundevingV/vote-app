@@ -1,10 +1,10 @@
 import React from "react";
-import Vote from "../components/Vote";
+import MainContent from "../components/main/MainContent";
 
 const App = () => {
   return (
     <div>
-      <Vote />
+      <MainContent />
     </div>
   );
 };
