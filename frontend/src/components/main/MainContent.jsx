@@ -6,7 +6,6 @@ import cx from "classnames";
 import contractABI from "../../abi/contractABI.json";
 import { useRouter } from "next/navigation";
 import VoteButton from "../Button/VoteButton";
-
 const MainContent = () => {
   const [account, setAccount] = useState("");
   const [contract, setContract] = useState(null);
@@ -33,7 +32,6 @@ const MainContent = () => {
         try {
           await loadGetAllPoll(contractInstance);
           await loadGetPollCount(contractInstance);
-          // await loadGetHasVoted(contractInstance, 1);
         } catch (error) {
           alert(
             "계약 호출에 오류가 발생했습니다. ABI와 계약 주소를 확인해 주세요."
@@ -41,6 +39,7 @@ const MainContent = () => {
         }
       } else {
         alert("메타마스크를 설치해 주세요!");
+        router.push("/onboarding");
       }
     };
 
@@ -97,14 +96,17 @@ const MainContent = () => {
     router.push(`/vote?id=${pollId}`);
   };
 
+  // 투표 토글
+  const [viewMode, setViewMode] = useState("all");
+
+  const activePolls = polls.filter((poll) => poll.isActive);
+  const inactivePolls = polls.filter((poll) => !poll.isActive);
+
   return (
     <div className="flex flex-col gap-10 ">
       <div className="flex justify-between items-center">
-        <div>
-          <h2 className="text-4xl font-bold mb-5">⛓️ 투표</h2>
-          <p>모든 투표수 : {pollCount}</p>
-        </div>
-        <div className="flex justify-center mt-5 gap-2">
+        <h2 className="text-4xl font-bold ">⛓️ 투표</h2>
+        <div className="flex justify-center gap-2">
           <input
             type="text"
             value={question}
@@ -123,15 +125,56 @@ const MainContent = () => {
           />
         </div>
       </div>
+      <div className="flex gap-5 justify-center">
+        <button
+          onClick={() => setViewMode("all")}
+          className={cx(
+            "text-lg font-semibold duration-500 hover:scale-105 p-2 rounded-lg",
+            {
+              "bg-emerald-500": viewMode === "all",
+            }
+          )}
+        >
+          모든 투표 ({polls.length})
+        </button>
+        <button
+          onClick={() => setViewMode("active")}
+          className={cx(
+            "text-lg font-semibold duration-500 hover:scale-105 p-2 rounded-lg",
+            {
+              "bg-emerald-500": viewMode === "active",
+            }
+          )}
+        >
+          진행중인 투표({activePolls.length})
+        </button>
+        <button
+          onClick={() => setViewMode("inactive")}
+          className={cx(
+            "text-lg font-semibold duration-500 hover:scale-105 p-2 rounded-lg",
+            {
+              "bg-red-500": viewMode === "inactive",
+            }
+          )}
+        >
+          종료된 투표({inactivePolls.length})
+        </button>
+      </div>
       <div className="flex flex-wrap gap-5 justify-center">
         {polls.map((poll, index) => (
           <div
             key={`${poll.question}_${index}`}
-            className="p-10 w-96 bg-zinc-600 rounded-lg hover:scale-105 duration-500 cursor-pointer flex flex-col gap-3 shadow-md"
+            className={cx(
+              { "a hidden": viewMode === "active" && !poll.isActive },
+              { "a hidden": viewMode === "inactive" && poll.isActive },
+              "p-10 w-96 bg-zinc-600 rounded-lg hover:scale-105 duration-500 cursor-pointer flex flex-col gap-3 shadow-md"
+            )}
             onClick={() => handleNavigate(index)}
           >
-            <div className="flex justify-between">
-              <p className="font-bold text-2xl">{poll.question}</p>
+            <div className="flex justify-between items-center">
+              <p className="font-bold text-2xl truncate max-w-[80%]">
+                {poll.question}
+              </p>
               <p
                 className={cx(
                   { "text-green-500": poll.isActive },
@@ -150,10 +193,9 @@ const MainContent = () => {
                 🗳️ 소중한 한 표가 필요합니다 !
               </p>
             )}
-            {/* <p className="text-gray-400 text-sm">{poll.owner}</p> */}
 
             {poll.candidates.slice(0, 3).map((candidate) => (
-              <p>{candidate.name}</p>
+              <p key={candidate.name}>{candidate.name}</p>
             ))}
             {!poll.candidates.length && <p>아직 후보가 없습니다 !</p>}
           </div>

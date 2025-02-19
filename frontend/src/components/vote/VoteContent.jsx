@@ -63,7 +63,8 @@ const VoteContent = () => {
 
     setVoteIndex(-1);
 
-    await loadGetPollResult(contract);
+    loadGetPollResult(contract);
+    loadGetMyVoterInfo(contract);
   };
 
   const handleDeletePoll = async () => {
@@ -95,12 +96,10 @@ const VoteContent = () => {
 
   // getMyVoterInfo
   const [myVoterInfo, setMyVoterInfo] = useState();
-
   const loadGetMyVoterInfo = async (contractInstance) => {
     const newMyVoterInfo = await contractInstance.methods
       .getMyVoterInfo(pollId)
       .call({ from: account });
-
     setMyVoterInfo(newMyVoterInfo);
   };
 
@@ -116,9 +115,9 @@ const VoteContent = () => {
       .send({ from: account });
 
     setCandidateName("");
-    await loadGetPollResult(contract);
+    loadGetPollResult(contract);
+    loadGetMyVoterInfo(contract);
   };
-
   return (
     <Suspense fallback={<div>Loading...</div>}>
       {poll.length === 0 ? (
@@ -158,28 +157,8 @@ const VoteContent = () => {
                 </p>
               )}
             </div>
-            {account === poll.owner && (
-              <div className="flex justify-center  gap-2">
-                <input
-                  type="text"
-                  value={candidateName}
-                  onChange={(e) => setCandidateName(e.target.value)}
-                  placeholder="후보 등록"
-                  required
-                  className="p-4 w-80 h-10 bg-slate-50 rounded-lg text-black"
-                />
-                <VoteButton
-                  text={"등록 하기"}
-                  itemId={candidateName}
-                  bGColor={"bg-emerald-500"}
-                  hoverBgColor={"hover:bg-emerald-600"}
-                  isActive={candidateName.length > 0}
-                  isDisabled={!candidateName.length}
-                  onClick={handleAddCandidate}
-                />
-              </div>
-            )}
           </div>
+
           {poll && poll.names ? (
             poll.names.map((name, index) => (
               <div
@@ -205,7 +184,7 @@ const VoteContent = () => {
                 }}
               >
                 <div className="flex justify-between">
-                  <p className="font-bold text-2xl">{name}</p>
+                  <p className="font-bold text-2xl ">{name}</p>
                   <p className="font-bold text-2xl">
                     {poll.votes[index] > 0 && totalVoteCount > 0
                       ? `${Math.floor(
@@ -236,7 +215,27 @@ const VoteContent = () => {
           ) : (
             <p>Loading...</p>
           )}
-
+          {account === poll.owner && (
+            <div className="flex justify-center gap-2">
+              <input
+                type="text"
+                value={candidateName}
+                onChange={(e) => setCandidateName(e.target.value)}
+                placeholder="후보 등록"
+                required
+                className="p-4 w-80 h-10 bg-slate-50 rounded-lg text-black"
+              />
+              <VoteButton
+                text={"등록 하기"}
+                itemId={candidateName}
+                bGColor={"bg-emerald-500"}
+                hoverBgColor={"hover:bg-emerald-600"}
+                isActive={candidateName.length > 0}
+                isDisabled={!candidateName.length}
+                onClick={handleAddCandidate}
+              />
+            </div>
+          )}
           <div className="flex justify-center mt-5 gap-4">
             <VoteButton
               text={"투표 하기"}

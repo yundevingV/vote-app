@@ -142,11 +142,6 @@
     "name": "getMyVoterInfo",
     "outputs": [
       {
-        "internalType": "address",
-        "name": "add",
-        "type": "address"
-      },
-      {
         "internalType": "bool",
         "name": "isVoted",
         "type": "bool"
