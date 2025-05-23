@@ -6,4 +6,4 @@
 
 - Solidity
 - React
-- Docker (예정)
+- Docker
